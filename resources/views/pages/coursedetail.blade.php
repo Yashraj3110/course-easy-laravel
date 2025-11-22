@@ -96,63 +96,158 @@
                 </section>
 
                 <!-- Curriculum -->
-                <section class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl">
-                    <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">Course Curriculum</h2>
+                <section class="bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-2xl shadow-xl">
+                    <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-6">
+                        Course Curriculum
+                    </h2>
                     <div id="course-curriculum"
-                        class="divide-y divide-gray-100 dark:divide-gray-700 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden shadow-inner">
+                        class="divide-y divide-gray-100 dark:divide-gray-700 border border-gray-200 dark:border-gray-700 
+               rounded-xl overflow-hidden shadow-inner">
                         <!-- Curriculum populated by JS -->
                     </div>
                 </section>
 
+
             </div>
 
             <!-- Right Column: Sticky Enrollment Card -->
-            <div class="lg:col-span-1 mt-10 lg:mt-0">
+            <div class="lg:col-span-1 mt-10 lg:mt-0 space-y-4">
+                <!-- Sidebar Card -->
                 <div
                     class="lg:sticky lg:top-24 bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-2xl border border-gray-100 dark:border-gray-700">
-                    <div class="text-3xl font-extrabold text-gray-900 dark:text-white mb-4 flex items-end">
-                        <span class="text-5xl text-blue-600 dark:text-blue-400">$<span id="course-price">99.99</span></span>
-                        <span class="text-xl text-gray-500 dark:text-gray-400 ml-2">/ lifetime access</span>
+
+                    <!-- Non-enrolled state -->
+                    <div id="enroll-section">
+                        <div class="text-3xl font-extrabold text-gray-900 dark:text-white mb-4 flex items-end">
+                            <span class="text-5xl text-blue-600 dark:text-blue-400">$<span
+                                    id="course-price">99.99</span></span>
+                            <span class="text-xl text-gray-500 dark:text-gray-400 ml-2">/ lifetime access</span>
+                        </div>
+
+                        <button id="enroll-button"
+                            class="w-full bg-blue-600 text-white font-extrabold text-lg py-4 rounded-xl hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-[1.01] shadow-lg shadow-blue-500/40 dark:shadow-blue-700/40 mb-5">
+                            Enroll Now
+                        </button>
+
+                        <p class="text-center text-sm text-gray-500 dark:text-gray-400 mb-6">30-Day Money-Back Guarantee</p>
+
+                        <h3 class="text-xl font-bold text-gray-700 dark:text-gray-300 mb-3">This course includes:</h3>
+
+                        <ul class="space-y-3 text-gray-600 dark:text-gray-400">
+                            <li class="flex items-center">
+                                <i data-lucide="video" class="w-5 h-5 text-blue-500 mr-3 flex-shrink-0"></i>
+                                <span id="course-hours" class="font-semibold text-gray-800 dark:text-white mr-1">45
+                                    hours</span> of on-demand video
+                            </li>
+                            <li class="flex items-center">
+                                <i data-lucide="book-open" class="w-5 h-5 text-blue-500 mr-3 flex-shrink-0"></i>
+                                <span id="course-modules" class="font-semibold text-gray-800 dark:text-white mr-1">10</span>
+                                Modules & Projects
+                            </li>
+                            <li class="flex items-center">
+                                <i data-lucide="download" class="w-5 h-5 text-blue-500 mr-3 flex-shrink-0"></i> Downloadable
+                                code and resources
+                            </li>
+                            <li class="flex items-center">
+                                <i data-lucide="award" class="w-5 h-5 text-blue-500 mr-3 flex-shrink-0"></i> Certificate of
+                                Completion
+                            </li>
+                            <li class="flex items-center">
+                                <i data-lucide="calendar-check" class="w-5 h-5 text-blue-500 mr-3 flex-shrink-0"></i>
+                                Last Updated: <span id="course-last-updated"
+                                    class="font-semibold text-gray-800 dark:text-white ml-1">October 2025</span>
+                            </li>
+                        </ul>
                     </div>
 
-                    <button id="enroll-button"
-                        class="w-full bg-blue-600 text-white font-extrabold text-lg py-4 rounded-xl hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-[1.01] shadow-lg shadow-blue-500/40 dark:shadow-blue-700/40 mb-5">
-                        Enroll Now
-                    </button>
+                    <!-- Enrolled state -->
+                    <div id="progress-section"
+                        class="hidden bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-100 dark:border-gray-700 space-y-6">
 
-                    <p class="text-center text-sm text-gray-500 dark:text-gray-400 mb-6">30-Day Money-Back Guarantee</p>
+                        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
+                            <i data-lucide="bar-chart-2" class="w-6 h-6 text-blue-600 dark:text-blue-400"></i>
+                            Your Learning Analytics
+                        </h3>
 
-                    <h3 class="text-xl font-bold text-gray-700 dark:text-gray-300 mb-3">This course includes:</h3>
+                        <!-- Lecture Completion -->
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-700 dark:text-gray-300 font-medium">Lecture Completion</span>
+                                <span class="font-semibold text-gray-900 dark:text-white">3 / 7</span>
+                            </div>
+                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-4 shadow-inner">
+                                <div class="h-4 rounded-full bg-gradient-to-r from-blue-500 to-blue-400 dark:from-blue-400 dark:to-blue-300"
+                                    style="width: 43%"></div>
+                            </div>
+                        </div>
 
-                    <ul class="space-y-3 text-gray-600 dark:text-gray-400">
-                        <li class="flex items-center">
-                            <i data-lucide="video" class="w-5 h-5 text-blue-500 mr-3 flex-shrink-0"></i>
-                            <span id="course-hours" class="font-semibold text-gray-800 dark:text-white mr-1">45
-                                hours</span> of
-                            on-demand video
-                        </li>
-                        <li class="flex items-center">
-                            <i data-lucide="book-open" class="w-5 h-5 text-blue-500 mr-3 flex-shrink-0"></i>
-                            <span id="course-modules" class="font-semibold text-gray-800 dark:text-white mr-1">10</span>
-                            Modules
-                            & Projects
-                        </li>
-                        <li class="flex items-center">
-                            <i data-lucide="download" class="w-5 h-5 text-blue-500 mr-3 flex-shrink-0"></i>
-                            Downloadable code and resources
-                        </li>
-                        <li class="flex items-center">
-                            <i data-lucide="award" class="w-5 h-5 text-blue-500 mr-3 flex-shrink-0"></i>
-                            Certificate of Completion
-                        </li>
-                        <li class="flex items-center">
-                            <i data-lucide="calendar-check" class="w-5 h-5 text-blue-500 mr-3 flex-shrink-0"></i>
-                            Last Updated: <span id="course-last-updated"
-                                class="font-semibold text-gray-800 dark:text-white ml-1">October 2025</span>
-                        </li>
-                    </ul>
+                        <!-- Quizzes Completed -->
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-700 dark:text-gray-300 font-medium">Quizzes Completed</span>
+                                <span class="font-semibold text-gray-900 dark:text-white">2 / 3</span>
+                            </div>
+                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-4 shadow-inner">
+                                <div class="h-4 rounded-full bg-gradient-to-r from-green-500 to-green-400 dark:from-green-400 dark:to-green-300"
+                                    style="width: 66%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Hours Completed -->
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-700 dark:text-gray-300 font-medium">Hours Completed</span>
+                                <span class="font-semibold text-gray-900 dark:text-white">20 / 45 hrs</span>
+                            </div>
+                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-4 shadow-inner">
+                                <div class="h-4 rounded-full bg-gradient-to-r from-purple-500 to-purple-400 dark:from-purple-400 dark:to-purple-300"
+                                    style="width: 44%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Notes Progress / Continue -->
+                        <div
+                            class="bg-gray-50 dark:bg-gray-900 rounded-xl p-4 flex justify-between items-center shadow-inner">
+                            <div>
+                                <p class="text-gray-700 dark:text-gray-300 font-medium">Continue Notes</p>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Last saved: Lecture 3</p>
+                            </div>
+                            <button type="button" onclick="window.location.href='{{ route('course.player') }}'"
+                                class="px-4 py-2 bg-yellow-400 dark:bg-yellow-500 text-gray-900 dark:text-gray-100 font-semibold rounded-lg hover:bg-yellow-500 dark:hover:bg-yellow-600 transition duration-200 flex items-center gap-1">
+                                <i data-lucide="edit-2" class="w-4 h-4"></i> Continue
+                            </button>
+                        </div>
+
+                        <!-- Quiz Button -->
+                        <div>
+                            <button type="button" onclick="window.location.href='{{ route('course.quiz') }}'"
+                                class="w-full bg-green-500 text-white font-bold py-3 rounded-xl hover:bg-green-600 
+                                         dark:bg-green-400 dark:hover:bg-green-500 transition duration-200 shadow-md 
+                                        flex justify-center items-center gap-2">
+                                <i data-lucide="edit-3" class="w-5 h-5"></i> Take Quiz
+                            </button>
+
+                        </div>
+
+                        <!-- Discussion Button -->
+                        <div>
+                            <button type="button" onclick="window.location.href='{{ route('course.discuss') }}'"
+                                class="w-full bg-indigo-500 text-white font-bold py-3 rounded-xl hover:bg-indigo-600 
+                   dark:bg-indigo-400 dark:hover:bg-indigo-500 transition duration-200 shadow-md 
+                   flex justify-center items-center gap-2">
+                                <i data-lucide="message-square" class="w-5 h-5"></i> Go to Discussions
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Your course info, progress, etc. goes here -->
                 </div>
+
+
             </div>
+
+
+
 
         </div>
     </div>
@@ -161,8 +256,20 @@
 @push('scripts')
     <!-- === JAVASCRIPT LOGIC === -->
     <script>
+        const toggleBtn = document.getElementById('enroll-button');
+        const enrollSection = document.getElementById('enroll-section');
+        const progressSection = document.getElementById('progress-section');
+
+        toggleBtn.addEventListener('click', () => {
+            enrollSection.classList.toggle('hidden');
+            progressSection.classList.toggle('hidden');
+        });
+
         // Initialize lucide icons
         lucide.createIcons();
+
+
+        // Example JS to toggle based on enrollment
 
         // --- Dummy Course Data ---
         const courseData = {
@@ -257,28 +364,40 @@
 
             // Render Curriculum
             const curriculumList = document.getElementById('course-curriculum');
-            curriculumList.innerHTML = data.curriculum.map((module, index) => `
-                <details class="group p-4 transition duration-200 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
-                    <summary class="flex justify-between items-center font-semibold text-gray-900 dark:text-white">
-                        <div class="flex items-center">
-                            <i data-lucide="chevron-right" class="w-5 h-5 mr-3 text-blue-500 transition-transform duration-300 group-open:rotate-90"></i>
-                            Module ${index + 1}: ${module.title}
-                        </div>
-                        <span class="text-sm text-gray-500 dark:text-gray-400">${module.duration}</span>
-                    </summary>
-                    <ul class="ml-8 mt-3 space-y-2 text-gray-600 dark:text-gray-400 border-l border-gray-200 dark:border-gray-600 pl-4 py-1">
-                        ${module.topics.map(topic => `
-                                                <li class="flex items-center text-sm">
-                                                    <i data-lucide="play-circle" class="w-4 h-4 mr-2 text-green-500 flex-shrink-0"></i>
-                                                    ${topic}
-                                                </li>
-                                            `).join('')}
-                    </ul>
-                </details>
-            `).join('');
 
-            // Re-render lucide icons after adding new HTML
+            curriculumList.innerHTML = data.curriculum.map((module, index) => `
+    <details
+        class="group p-3 sm:p-4 transition duration-200 cursor-pointer 
+               hover:bg-gray-50 dark:hover:bg-gray-700/60">
+        <summary
+            class="flex flex-wrap sm:flex-nowrap justify-between items-center gap-2 
+                   font-semibold text-gray-900 dark:text-white">
+            <div class="flex items-center text-sm sm:text-base">
+                <i data-lucide="chevron-right"
+                   class="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-blue-500 
+                          transition-transform duration-300 group-open:rotate-90"></i>
+                <span>Module ${index + 1}: ${module.title}</span>
+            </div>
+            <span class="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+                ${module.duration}
+            </span>
+        </summary>
+
+        <ul
+            class="ml-5 sm:ml-8 mt-3 space-y-2 text-gray-600 dark:text-gray-400 
+                   border-l border-gray-200 dark:border-gray-600 pl-3 sm:pl-4 py-1">
+            ${module.topics.map(topic => `
+                    <li class="flex items-center text-xs sm:text-sm break-words">
+                        <i data-lucide="play-circle" class="w-4 h-4 mr-2 text-green-500 flex-shrink-0"></i>
+                        ${topic}
+                    </li>
+                `).join('')}
+        </ul>
+    </details>
+`).join('');
+
             lucide.createIcons();
+
         }
 
         // --- Message Box Functionality ---

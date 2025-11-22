@@ -5,6 +5,7 @@
                     <p>&copy; 2025 Course Easy. All rights reserved.</p>
                 </div>
                 <div class="flex flex-wrap justify-center md:justify-start space-x-6">
+                    <a href="{{ route('pages.dash') }}" class="hover:text-white dark:hover:text-indigo-400 transition-colors">Dasboards</a>
                     <a href="#" class="hover:text-white dark:hover:text-indigo-400 transition-colors">Privacy
                         Policy</a>
                     <a href="#" class="hover:text-white dark:hover:text-indigo-400 transition-colors">Terms of
