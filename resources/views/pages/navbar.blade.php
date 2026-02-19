@@ -1,3 +1,6 @@
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+
+
   <header id="header"
       class="bg-white dark:bg-gray-800 shadow-xl sticky top-0 z-50 transition-colors duration-300 rounded-b-xl">
       <nav class="container mx-auto px-6 py-4 flex justify-between items-center relative">
@@ -9,7 +12,7 @@
 
           <!-- Desktop Links -->
           <div class="hidden md:flex items-center space-x-6">
-              <!-- Note: Laravel route placeholders replaced with # for static file compilation -->
+
               <a href="{{ route('home') }}"
                   class="text-gray-600 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-indigo-400 transition-colors duration-300 font-medium">Home</a>
               <a href="{{ route('courses') }}"
@@ -19,15 +22,31 @@
               <a href="#contact"
                   class="text-gray-600 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-indigo-400 transition-colors duration-300 font-medium">Contact</a>
 
-              <button id="openLoginModalBtn"
-                  class="text-gray-600 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-indigo-400 transition-colors duration-300 font-semibold focus:outline-none">
-                  Login
-              </button>
+              <!-- Guest Links -->
+              @guest
+                  <button id="openLoginModalBtn"
+                      class="text-gray-600 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-indigo-400 transition-colors duration-300 font-semibold focus:outline-none">
+                      Login
+                  </button>
 
-              <button id="openSignupModalBtn"
-                  class="bg-indigo-600 text-white px-5 py-2 rounded-xl font-bold hover:bg-indigo-700 transition-all duration-300 transform hover:scale-105 shadow-md shadow-indigo-500/30 focus:outline-none focus:ring-4 focus:ring-indigo-300">
-                  Sign Up
-              </button>
+                  <button id="openSignupModalBtn"
+                      class="bg-indigo-600 text-white px-5 py-2 rounded-xl font-bold hover:bg-indigo-700 transition-all duration-300 transform hover:scale-105 shadow-md shadow-indigo-500/30 focus:outline-none focus:ring-4 focus:ring-indigo-300">
+                      Sign Up
+                  </button>
+              @endguest
+
+              <!-- Authenticated User Links -->
+              @auth
+                  <span class="text-gray-600 dark:text-gray-300 font-medium">Hello, {{ Auth::user()->name }}</span>
+
+                  <form method="POST" action="{{ route('logout') }}" class="inline">
+                      @csrf
+                      <button type="submit"
+                          class="bg-red-500 text-white px-4 py-2 rounded-xl font-bold hover:bg-red-600 transition-all duration-300 shadow-md shadow-red-500/30 focus:outline-none focus:ring-4 focus:ring-red-300">
+                          Logout
+                      </button>
+                  </form>
+              @endauth
           </div>
 
           <!-- Mobile Menu Toggle Button (Visible on screens smaller than md) -->
@@ -38,6 +57,7 @@
               </button>
           </div>
       </nav>
+
 
       <!-- Overlay + Modal -->
       <div id="loginModal"
@@ -57,7 +77,7 @@
                   dashboard.</p>
 
               <!-- Login Form -->
-              <form action="#" method="POST" class="space-y-6">
+              <form id="loginForm" class="space-y-6">
                   <div>
                       <label for="login-email"
                           class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Email</label>
@@ -120,7 +140,9 @@
                   seconds.</p>
 
               <!-- Sign Up Form -->
-              <form action="#" method="POST" class="space-y-6">
+              <form action="{{ route('register') }}" method="POST" class="space-y-6">
+                  @csrf
+
                   <div>
                       <label for="signup-name"
                           class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Full
@@ -186,8 +208,62 @@
           </div>
       </div>
   </div>
+
   <script>
-    lucide.createIcons();
+      document.addEventListener("DOMContentLoaded", () => {
+          const notyf = new Notyf({
+              duration: 5000,
+              position: {
+                  x: 'right',
+                  y: 'top'
+              },
+          });
+
+          const form = document.getElementById("loginForm");
+          const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+          form.addEventListener("submit", async (e) => {
+              e.preventDefault();
+
+              const data = {
+                  email: document.getElementById("login-email").value,
+                  password: document.getElementById("login-password").value
+              };
+
+              try {
+                  const response = await fetch("{{ route('login') }}", {
+                      method: "POST",
+                      headers: {
+                          "Content-Type": "application/json",
+                          "Accept": "application/json",
+                          "X-CSRF-TOKEN": token
+                      },
+                      body: JSON.stringify(data)
+                  });
+
+                  if (response.ok) {
+                      // SUCCESS → Redirect to home
+                      window.location.href = "{{ route('home') }}";
+                      return;
+                  }
+
+                  // FAILED → Show Notyf
+                  const error = await response.json();
+                  notyf.error(error.message || "Invalid credentials");
+
+              } catch (err) {
+                  console.error(err);
+                  notyf.error("Something went wrong. Please try again.");
+              }
+          });
+
+      });
+  </script>
+
+
+
+  <script>
+      lucide.createIcons();
       // ===== MODAL ELEMENTS =====
 
       document.addEventListener('DOMContentLoaded', () => {
@@ -293,17 +369,17 @@
               }
           });
 
-          // Mock form submission
-          document.querySelectorAll('#loginModal form, #signupModal form').forEach(form => {
-              form.addEventListener('submit', (e) => {
-                  e.preventDefault();
-                  console.log(`Form submitted: ${form.id || 'unnamed'}`);
-                  Object.values(modals).forEach(({
-                      modal,
-                      content
-                  }) => closeModal(modal, content));
-              });
-          });
+          //   // Mock form submission
+          //   document.querySelectorAll('#loginModal form, #signupModal form').forEach(form => {
+          //       form.addEventListener('submit', (e) => {
+          //           e.preventDefault();
+          //           console.log(`Form submitted: ${form.id || 'unnamed'}`);
+          //           Object.values(modals).forEach(({
+          //               modal,
+          //               content
+          //           }) => closeModal(modal, content));
+          //       });
+          //   });
 
           // --- Mobile Menu Logic ---
           const mobileMenuButton = document.getElementById('mobile-menu-button');

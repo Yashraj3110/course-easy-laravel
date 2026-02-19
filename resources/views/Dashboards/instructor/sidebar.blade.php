@@ -61,28 +61,18 @@
             <span>My Courses</span>
         </a>
 
-        <!-- Create New Course -->
-        <a href="{{ route('dashboard.instructor.newcourses') }}"
-            class="flex items-center space-x-2 py-1 transition 
-        {{ request()->routeIs('dashboard.instructor.newcourses') ? 'text-accent-gold font-semibold' : 'hover:text-white' }}">
-
-            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 8 8">
-                <circle cx="4" cy="4" r="3" />
-            </svg>
-
-            <span>Create New Course</span>
-        </a>
+        
 
         <!-- Curriculum -->
-        <a href="{{ route('dashboard.instructor.curriculam') }}"
+        <a href="{{ route('dashboard.instructor.curriculum') }}"
             class="flex items-center space-x-2 py-1 transition 
-        {{ request()->routeIs('dashboard.instructor.curriculam') ? 'text-accent-gold font-semibold' : 'hover:text-white' }}">
+        {{ request()->routeIs('dashboard.instructor.curriculum') ? 'text-accent-gold font-semibold' : 'hover:text-white' }}">
 
             <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 8 8">
                 <circle cx="4" cy="4" r="3" />
             </svg>
 
-            <span>Curriculum</span>
+            <span>Quiz</span>
         </a>
     </div>
 
@@ -102,9 +92,9 @@
     </a>
 
     <!-- Assignments -->
-    <a href="{{ route('dashboard.instructor.assignments') }}"
+    <a href="{{ route('instructor.quizzes.index') }}"
         class="flex items-center space-x-3 p-3 rounded-xl transition
-        {{ request()->routeIs('dashboard.instructor.assignments')
+        {{ request()->routeIs('instructor.quizzes.index')
             ? 'bg-accent-blue/20 text-accent-gold ring-2 ring-accent-blue/60 font-semibold'
             : 'text-gray-300 hover:bg-gray-700/40 hover:text-white' }}">
 

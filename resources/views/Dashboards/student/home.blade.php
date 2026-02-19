@@ -6,7 +6,7 @@
 <main class="flex-1 p-10 overflow-y-auto">
 
     <header class="flex justify-between items-center mb-12">
-        <h2 class="text-4xl font-light text-white">Hello, <span class="font-bold">Alex</span>. Ready to learn?</h2>
+        <h2 class="text-4xl font-light text-white">Hello, <span class="font-bold">{{ Auth::user()->name }}</span>. Ready to learn?</h2>
         <div class="flex items-center space-x-6">
             <div class="relative">
                 <input type="text" placeholder="Search lessons, projects..."

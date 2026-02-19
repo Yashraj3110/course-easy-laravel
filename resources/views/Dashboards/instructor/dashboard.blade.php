@@ -8,6 +8,8 @@
     <link rel="icon" type="image/png" href="{{ asset('assets/image/image.png') }}">
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
     <script>
         tailwind.config = {
@@ -55,6 +57,30 @@
             background: #2563eb;
         }
     </style>
+   <style>
+    /* Custom Stepper Styles */
+    .step-circle {
+        @apply w-10 h-10 rounded-full border-2 flex items-center justify-center font-bold transition-all duration-300 z-10 bg-slate-900 border-slate-700 text-slate-500;
+    }
+    
+    .step.active .step-circle {
+        @apply border-indigo-500 bg-indigo-500 text-white shadow-[0_0_15px_rgba(99,102,241,0.4)];
+    }
+
+    .step.completed .step-circle {
+        @apply border-emerald-500 bg-emerald-500 text-white;
+    }
+
+    .step-line {
+        @apply flex-1 h-0.5 bg-slate-800 mx-4 transition-colors duration-500;
+    }
+
+    /* Input focus effects */
+    .input-dark:focus {
+        @apply border-indigo-500 ring-4 ring-indigo-500/10;
+    }
+</style>
+
 </head>
 
 <body class="bg-primary-dark text-gray-200 min-h-screen flex flex-col antialiased">
@@ -99,6 +125,16 @@
             </div>
 
             <div class="hidden md:flex items-center space-x-6">
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit"
+                        class="px-4 py-2 rounded-lg text-sm font-semibold
+                   bg-gradient-to-r from-pink-500 to-purple-600
+                   hover:from-pink-600 hover:to-purple-700
+                   text-white shadow-md transition">
+                        Logout
+                    </button>
+                </form>
                 <img src="https://i.pravatar.cc/40" class="w-9 h-9 rounded-full border border-purple-600">
             </div>
 
@@ -164,7 +200,7 @@
                 .classList.toggle('-translate-x-full');
         }
     </script>
-
+    @stack('scriptsdash')
 </body>
 
 </html>

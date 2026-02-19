@@ -79,7 +79,16 @@
             </div>
 
             <div class="hidden md:flex items-center space-x-6">
-                <img src="https://i.pravatar.cc/40" class="w-9 h-9 rounded-full border border-red-600">
+                <img src="{{ asset(Auth::user()->photo) }}"
+                    class="w-9 h-9 rounded-full object-cover border border-blue-600" alt="Profile">
+                <!-- Logout Button -->
+                <form method="POST" action="{{ route('logout') }}" class="inline">
+                    @csrf
+                    <button type="submit"
+                        class="bg-red-500 text-white px-4 py-2 rounded-xl font-bold hover:bg-red-600 transition-all duration-300 shadow-md shadow-red-500/30 focus:outline-none focus:ring-4 focus:ring-red-300">
+                        Logout
+                    </button>
+                </form>
             </div>
 
             <button onclick="toggleSidebar()" class="md:hidden p-2 rounded-md hover:bg-red-700/40">

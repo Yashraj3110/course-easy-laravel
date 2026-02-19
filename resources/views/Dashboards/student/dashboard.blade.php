@@ -103,7 +103,16 @@
             </div>
 
             <div class="hidden md:flex items-center space-x-6">
-                <img src="https://i.pravatar.cc/40" class="w-9 h-9 rounded-full border border-blue-600">
+                <img src="{{ asset(Auth::user()->photo) }}"
+                    class="w-9 h-9 rounded-full object-cover border border-blue-600" alt="Profile">
+                <!-- Logout Button -->
+                <form method="POST" action="{{ route('logout') }}" class="inline">
+                      @csrf
+                      <button type="submit"
+                          class="bg-red-500 text-white px-4 py-2 rounded-xl font-bold hover:bg-red-600 transition-all duration-300 shadow-md shadow-red-500/30 focus:outline-none focus:ring-4 focus:ring-red-300">
+                          Logout
+                      </button>
+                  </form>
             </div>
 
             <button onclick="toggleSidebar()" class="md:hidden p-2 rounded-md hover:bg-blue-700/40">
@@ -134,77 +143,77 @@
                 <nav class="space-y-2">
 
                     <!-- Dashboard -->
-                   <!-- Dashboard -->
-    <a href="{{ route('dashboard.student.home') }}"
-        class="flex items-center space-x-3 p-3 rounded-xl transition duration-200
+                    <!-- Dashboard -->
+                    <a href="{{ route('dashboard.student.home') }}"
+                        class="flex items-center space-x-3 p-3 rounded-xl transition duration-200
         {{ request()->routeIs('dashboard.student.home')
             ? 'bg-accent-blue/20 text-accent-gold font-semibold ring-2 ring-accent-blue/70'
             : 'text-gray-400 hover:bg-gray-700/50 hover:text-white' }}">
-        <svg class="icon w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none"
-            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round"
-                d="M3.75 3v11.55l7.5-3.75 7.5 3.75V3M18.75 6.75l-7.5 3.75-7.5-3.75" />
-        </svg>
-        <span>Dashboard</span>
-    </a>
+                        <svg class="icon w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3.75 3v11.55l7.5-3.75 7.5 3.75V3M18.75 6.75l-7.5 3.75-7.5-3.75" />
+                        </svg>
+                        <span>Dashboard</span>
+                    </a>
 
-    <!-- My Courses -->
-    <a href="{{ route('dashboard.student.courses') }}"
-        class="flex items-center space-x-3 p-3 rounded-xl transition duration-200
+                    <!-- My Courses -->
+                    <a href="{{ route('dashboard.student.courses') }}"
+                        class="flex items-center space-x-3 p-3 rounded-xl transition duration-200
         {{ request()->routeIs('dashboard.student.courses')
             ? 'bg-accent-blue/20 text-accent-gold font-semibold ring-2 ring-accent-blue/70'
             : 'text-gray-400 hover:bg-gray-700/50 hover:text-white' }}">
-        <svg class="icon w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none"
-            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round"
-                d="M12 6.042A8.967 8.967 0 006 3.75c-4.18 0-7.5 2.193-7.5 5.25 0 2.433 1.8 4.47 4.394 5.093l-.326 3.193a.75.75 0 001.076.626l1.62-1.079A9 9 0 0012 18z" />
-        </svg>
-        <span>My Courses</span>
-    </a>
+                        <svg class="icon w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 6.042A8.967 8.967 0 006 3.75c-4.18 0-7.5 2.193-7.5 5.25 0 2.433 1.8 4.47 4.394 5.093l-.326 3.193a.75.75 0 001.076.626l1.62-1.079A9 9 0 0012 18z" />
+                        </svg>
+                        <span>My Courses</span>
+                    </a>
 
-    <!-- Certificates -->
-    <a href="{{ route('dashboard.student.certificates') }}"
-        class="flex items-center space-x-3 p-3 rounded-xl transition duration-200
+                    <!-- Certificates -->
+                    <a href="{{ route('dashboard.student.certificates') }}"
+                        class="flex items-center space-x-3 p-3 rounded-xl transition duration-200
         {{ request()->routeIs('dashboard.student.certificates')
             ? 'bg-accent-blue/20 text-accent-gold font-semibold ring-2 ring-accent-blue/70'
             : 'text-gray-400 hover:bg-gray-700/50 hover:text-white' }}">
-        <svg class="icon w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none"
-            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round"
-                d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-3.75H4.5m4.5-3H4.5m4.5-3H4.5m4.5-3H4.5M18 19.5a2.25 2.25 0 002.25-2.25V5.25A2.25 2.25 0 0018 3H6a2.25 2.25 0 00-2.25 2.25v12A2.25 2.25 0 006 19.5h12zm-8.25-3.75h-.008v.008H9.75v-.008zM12 21.75a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z" />
-        </svg>
-        <span>Certificates</span>
-    </a>
+                        <svg class="icon w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-3.75H4.5m4.5-3H4.5m4.5-3H4.5m4.5-3H4.5M18 19.5a2.25 2.25 0 002.25-2.25V5.25A2.25 2.25 0 0018 3H6a2.25 2.25 0 00-2.25 2.25v12A2.25 2.25 0 006 19.5h12zm-8.25-3.75h-.008v.008H9.75v-.008zM12 21.75a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z" />
+                        </svg>
+                        <span>Certificates</span>
+                    </a>
 
-    <!-- Discussions -->
-    <a href="{{ route('dashboard.student.discussions') }}"
-        class="flex items-center space-x-3 p-3 rounded-xl transition duration-200
+                    <!-- Discussions -->
+                    <a href="{{ route('dashboard.student.discussions') }}"
+                        class="flex items-center space-x-3 p-3 rounded-xl transition duration-200
         {{ request()->routeIs('dashboard.student.discussions')
             ? 'bg-accent-blue/20 text-accent-gold font-semibold ring-2 ring-accent-blue/70'
             : 'text-gray-400 hover:bg-gray-700/50 hover:text-white' }}">
-        <svg class="icon w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none"
-            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round"
-                d="M21 21L15 15M10.5 5a5.5 5.5 0 110 11 5.5 5.5 0 010-11z" />
-        </svg>
-        <span>Discussions</span>
-    </a>
+                        <svg class="icon w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M21 21L15 15M10.5 5a5.5 5.5 0 110 11 5.5 5.5 0 010-11z" />
+                        </svg>
+                        <span>Discussions</span>
+                    </a>
 
-    <div class="h-px bg-gray-700/50 my-6"></div>
+                    <div class="h-px bg-gray-700/50 my-6"></div>
 
-    <!-- Settings -->
-    <a href="{{ route('dashboard.student.settings') }}"
-        class="flex items-center space-x-3 p-3 rounded-xl transition duration-200
+                    <!-- Settings -->
+                    <a href="{{ route('dashboard.student.settings') }}"
+                        class="flex items-center space-x-3 p-3 rounded-xl transition duration-200
         {{ request()->routeIs('dashboard.student.settings')
             ? 'bg-accent-blue/20 text-accent-gold font-semibold ring-2 ring-accent-blue/70'
             : 'text-gray-400 hover:bg-gray-700/50 hover:text-white' }}">
-        <svg class="icon w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none"
-            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round"
-                d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0M3.75 18H7.5" />
-        </svg>
-        <span>Settings</span>
-    </a>
+                        <svg class="icon w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0M3.75 18H7.5" />
+                        </svg>
+                        <span>Settings</span>
+                    </a>
 
                 </nav>
             </div>
@@ -226,7 +235,7 @@
         });
     </script> --}}
 
-
+    @stack('scripts')
 </body>
 
 

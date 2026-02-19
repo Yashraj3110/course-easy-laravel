@@ -19,7 +19,7 @@
                         class="text-base sm:text-lg md:text-xl text-indigo-100 dark:text-gray-400 mb-10 max-w-xl mx-auto md:mx-0 hero-text">
                         Access your dashboard, resume courses, or explore new topics to boost your skills.
                     </p>
-                    <a href="{{ route('dashboard') }}"
+                    <a href="{{ route('dashboard.student.home') }}"
                         class="bg-yellow-400 text-gray-900 font-bold px-6 sm:px-8 py-3 rounded-lg text-lg shadow-xl hover:bg-yellow-300 transition-all duration-300 transform hover:scale-105 dark:bg-yellow-500 dark:hover:bg-yellow-400">
                         Go to Dashboard
                     </a>
@@ -56,7 +56,7 @@
 
                 @auth
                     <!-- User is logged in -->
-                    <div class="relative z-10 w-full max-w-xs sm:max-w-md mx-auto md:ml-10">
+                    {{-- <div class="relative z-10 w-full max-w-xs sm:max-w-md mx-auto md:ml-10">
                         <div class="hero-card bg-white dark:bg-gray-700 rounded-2xl shadow-2xl p-6" data-aos="zoom-in"
                             data-aos-duration="1000">
                             <div class="flex items-center mb-4">
@@ -76,8 +76,28 @@
                                 <div class="bg-indigo-600 h-2.5 rounded-full w-2/5"></div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
+                    <!-- SHOW EMPTY STATE -->
+                    <div class="relative z-10 w-full max-w-xs sm:max-w-md mx-auto md:ml-10">
+                        <div class="hero-card bg-white dark:bg-gray-700 rounded-2xl shadow-xl p-6 text-center"
+                            data-aos="zoom-in" data-aos-duration="1000">
+
+                            <h4 class="text-lg font-semibold text-gray-800 dark:text-gray-100">
+                                No courses enrolled yet
+                            </h4>
+
+                            <p class="text-gray-500 dark:text-gray-400 mt-2 text-sm">
+                                Start learning by enrolling in your first course.
+                            </p>
+
+                            <a href="/courses"
+                                class="mt-4 inline-block bg-indigo-600 text-white px-4 py-2 rounded-lg shadow hover:bg-indigo-700 transition">
+                                Browse Courses
+                            </a>
+
+                        </div>
+                    </div>
                 @endauth
 
                 {{-- If user is NOT logged in --}}
