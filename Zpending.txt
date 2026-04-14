@@ -1,0 +1,12 @@
+Instructor Part :->
+user create , instructor create (Approval)
+course create , leactire create (Approval)
+Quiz creation 
+
+Home :->
+Course lecture Displaly
+Quiz display 
+
+
+
+

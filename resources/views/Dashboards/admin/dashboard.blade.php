@@ -4,10 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CourseEasy | Dashboard</title>
+    <title>CourseEasy | Admin HQ</title>
     <link rel="icon" type="image/png" href="{{ asset('assets/image/image.png') }}">
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
 
     <script>
         tailwind.config = {
@@ -15,15 +16,10 @@
             theme: {
                 extend: {
                     colors: {
-                        // Softer, more aesthetic dark tones
-                        'primary-dark': '#0f172a', // Deep, modern navy-blue (slate-900)
-                        'secondary-dark': '#1e293b', // Lighter for cards/sidebar (slate-800)
-                        'accent-gold': '#facc15', // Vibrant, slightly deeper gold (amber-400)
-                        'accent-blue': '#6366f1', // Soft, modern indigo (indigo-500)
-                    },
-                    boxShadow: {
-                        // Subtle inner shadow for depth
-                        'inner-dark': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.4)',
+                        'primary-dark': '#0f172a',
+                        'secondary-dark': '#1e293b',
+                        'accent-gold': '#facc15',
+                        'accent-blue': '#6366f1',
                     }
                 }
             }
@@ -31,172 +27,117 @@
     </script>
 
     <style>
-        .icon {
-            width: 1.25rem;
-            height: 1.25rem;
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 10px;
         }
     </style>
 </head>
 
-<body class="bg-primary-dark text-gray-200 min-h-screen flex flex-col antialiased">
-    <!-- 🔹 Navbar -->
-    <nav class="bg-red-900/40 border-b border-red-700/50 shadow-md sticky top-0 z-50 backdrop-blur-xl">
-        <div class="flex justify-between items-center px-6 py-4">
+<body class="bg-primary-dark text-gray-200 min-h-screen antialiased flex flex-col">
 
-            <!-- Desktop -->
-            <div class="hidden md:flex items-center space-x-4">
-                <a href="{{ route('home') }}"
-                    class="text-3xl font-extrabold bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500
-                text-transparent bg-clip-text tracking-tight">
-                    Course<span class="text-gray-200">Easy</span>
-                </a>
-                <div class="w-px h-8 bg-red-600/40"></div>
+    <!-- Top Admin Bar -->
+    <nav class="sticky top-0 z-50 bg-primary-dark/80 backdrop-blur-xl border-b border-gray-800 px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-8">
+            <a href="{{ route('home') }}" class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-red-600 rounded-xl flex items-center justify-center shadow-lg shadow-red-600/20">
+                    <i data-lucide="shield-check" class="text-white w-6 h-6"></i>
+                </div>
+                <div class="flex flex-col leading-none">
+                    <span class="text-xl font-black text-white tracking-tighter">CourseEasy</span>
+                    <span class="text-[10px] font-black text-red-500 uppercase mt-0.5">Admin Central</span>
+                </div>
+            </a>
+        </div>
 
-                <h1
-                    class="text-xl font-semibold tracking-wide uppercase
-                bg-gradient-to-r from-red-400 via-orange-400 to-amber-400
-                text-transparent bg-clip-text drop-shadow-sm">
-                    Admin Dashboard
-                </h1>
+        <div class="flex items-center gap-6">
+            <div class="hidden sm:flex flex-col items-end">
+                <span class="text-sm font-bold text-white">{{ Auth::user()->name }}</span>
+                <span class="text-[10px] font-black text-red-500 uppercase tracking-widest mt-1">Super Admin</span>
             </div>
-
-            <!-- Mobile -->
-            <div class="md:hidden flex items-center space-x-3 flex-1">
-                <a href="{{ route('home') }}"
-                    class="text-2xl font-extrabold bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500
-                text-transparent bg-clip-text tracking-tight">
-                    Course<span class="text-gray-200">Easy</span>
-                </a>
-
-                <div class="w-px h-6 bg-red-600/40"></div>
-
-                <span
-                    class="text-sm font-semibold tracking-wide uppercase
-                bg-gradient-to-r from-red-400 via-orange-400 to-amber-400
-                text-transparent bg-clip-text drop-shadow-sm">
-                    Admin Dashboard
-                </span>
-            </div>
-
-            <div class="hidden md:flex items-center space-x-6">
-                <img src="{{ asset(Auth::user()->photo) }}"
-                    class="w-9 h-9 rounded-full object-cover border border-blue-600" alt="Profile">
-                <!-- Logout Button -->
-                <form method="POST" action="{{ route('logout') }}" class="inline">
-                    @csrf
-                    <button type="submit"
-                        class="bg-red-500 text-white px-4 py-2 rounded-xl font-bold hover:bg-red-600 transition-all duration-300 shadow-md shadow-red-500/30 focus:outline-none focus:ring-4 focus:ring-red-300">
-                        Logout
-                    </button>
-                </form>
-            </div>
-
-            <button onclick="toggleSidebar()" class="md:hidden p-2 rounded-md hover:bg-red-700/40">
-                <svg class="w-7 h-7" fill="none" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-            </button>
-
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="p-3 bg-red-500/10 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition group">
+                    <i data-lucide="log-out" class="w-5 h-5 group-hover:scale-110 transition"></i>
+                </button>
+            </form>
         </div>
     </nav>
 
-
-    <!-- 🔹 Main Layout -->
-    <div class="flex flex-col md:flex-row min-h-screen">
+    <div class="flex flex-1 overflow-hidden">
+        
         <!-- Sidebar -->
-        <aside
-            class="w-full md:w-64 
-    bg-gradient-to-b from-red-900/40 via-amber-950/40 to-red-900/40
-    backdrop-blur-xl
-    border-r border-red-800/40 
-    shadow-2xl 
-    p-6 md:sticky md:top-16
-    h-auto md:h-[calc(100vh-4rem)]
-    transition-all duration-300">
+        <aside class="hidden md:flex flex-col w-64 bg-primary-dark border-r border-gray-800 p-6">
+            <nav class="space-y-2 flex-1">
+                <p class="px-3 text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 mb-4">Management</p>
+                
+                @php
+                    $adminItems = [
+                        ['route' => 'dashboard.admin.home', 'icon' => 'layout-grid', 'label' => 'Dashboard'],
+                        ['route' => 'dashboard.admin.users', 'icon' => 'users', 'label' => 'User Management'],
+                        ['route' => 'dashboard.admin.content', 'icon' => 'check-square', 'label' => 'Course Approvals'],
+                    ];
+                @endphp
 
-            <nav class="space-y-3">
+                @foreach($adminItems as $item)
+                    <a href="{{ route($item['route']) }}" 
+                       class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition {{ request()->routeIs($item['route']) ? 'bg-red-600 text-white shadow-lg shadow-red-600/20' : 'text-gray-400 hover:bg-secondary-dark hover:text-white' }}">
+                        <i data-lucide="{{ $item['icon'] }}" class="w-5 h-5"></i>
+                        {{ $item['label'] }}
+                    </a>
+                @endforeach
 
-                <!-- Dashboard -->
-                <a href="{{ route('dashboard.admin.home') }}"
-                    class="flex items-center space-x-3 p-3 rounded-xl 
-        {{ request()->routeIs('dashboard.admin.home')
-            ? 'bg-accent-blue/20 text-accent-gold font-semibold ring-2 ring-accent-blue/70'
-            : 'text-gray-400 hover:bg-gray-700/50 hover:text-white' }}">
+                <div class="h-px bg-gray-800 my-6 mx-3"></div>
 
-                    <svg class="icon" ...> ... </svg>
-                    <span>Dashboard</span>
+                <p class="px-3 text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 mb-4">Finance</p>
+                <a href="{{ route('dashboard.admin.financials') }}" 
+                   class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition {{ request()->routeIs('dashboard.admin.financials') ? 'bg-red-600 text-white shadow-lg shadow-red-600/20' : 'text-gray-400 hover:bg-secondary-dark hover:text-white' }}">
+                    <i data-lucide="banknote" class="w-5 h-5"></i>
+                    Revenue & Payouts
                 </a>
 
-                <!-- User Management -->
-                <a href="{{ route('dashboard.admin.users') }}"
-                    class="flex items-center space-x-3 p-3 rounded-xl 
-        {{ request()->routeIs('dashboard.admin.users')
-            ? 'bg-accent-blue/20 text-accent-gold font-semibold ring-2 ring-accent-blue/70'
-            : 'text-gray-400 hover:bg-gray-700/50 hover:text-white' }}">
-                    <svg class="icon" ...> ... </svg>
-                    <span>User Management</span>
+                <p class="px-3 text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 mb-4 mt-8">System</p>
+                <a href="{{ route('dashboard.admin.logs') }}" 
+                   class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition {{ request()->routeIs('dashboard.admin.logs') ? 'bg-red-600 text-white shadow-lg shadow-red-600/20' : 'text-gray-400 hover:bg-secondary-dark hover:text-white' }}">
+                    <i data-lucide="terminal" class="w-5 h-5"></i>
+                    Security Logs
                 </a>
-
-                <!-- Content Approval -->
-                <a href="{{ route('dashboard.admin.content') }}"
-                    class="flex items-center space-x-3 p-3 rounded-xl 
-        {{ request()->routeIs('dashboard.admin.content')
-            ? 'bg-accent-blue/20 text-accent-gold font-semibold ring-2 ring-accent-blue/70'
-            : 'text-gray-400 hover:bg-gray-700/50 hover:text-white' }}">
-                    <svg class="icon" ...> ... </svg>
-                    <span>Content Approval</span>
-                </a>
-
-                <!-- Financials -->
-                <a href="{{ route('dashboard.admin.financials') }}"
-                    class="flex items-center space-x-3 p-3 rounded-xl 
-        {{ request()->routeIs('dashboard.admin.financials')
-            ? 'bg-accent-blue/20 text-accent-gold font-semibold ring-2 ring-accent-blue/70'
-            : 'text-gray-400 hover:bg-gray-700/50 hover:text-white' }}">
-                    <svg class="icon" ...> ... </svg>
-                    <span>Financials & Audit</span>
-                </a>
-
-                <div class="h-px bg-gray-700/50 my-6"></div>
-
-                <!-- System Logs -->
-                <a href="{{ route('dashboard.admin.logs') }}"
-                    class="flex items-center space-x-3 p-3 rounded-xl 
-        {{ request()->routeIs('dashboard.admin.logs')
-            ? 'bg-accent-blue/20 text-accent-gold font-semibold ring-2 ring-accent-blue/70'
-            : 'text-gray-400 hover:bg-gray-700/50 hover:text-white' }}">
-                    <svg class="icon" ...> ... </svg>
-                    <span>System Logs</span>
-                </a>
-
             </nav>
 
-
-            <div class="mt-10 p-4 bg-accent-red/20 border border-accent-red rounded-xl text-center shadow-xl-red">
-                <p class="text-sm font-bold text-accent-red">⚠️ Critical Alert</p>
-                <p class="text-xs text-gray-300 mt-1">5+ Instructor Payouts Pending</p>
-                <button
-                    class="mt-2 text-xs font-semibold text-white bg-accent-red py-1 px-3 rounded-full hover:bg-red-700">Resolve
-                    Now</button>
+            <!-- Server Status -->
+            <div class="mt-auto p-4 bg-red-900/10 rounded-2xl border border-red-900/20">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                    <span class="text-[10px] font-black uppercase text-white">Cloud Node 01</span>
+                </div>
+                <p class="text-[10px] text-gray-500 font-bold">Uptime: 99.98%</p>
             </div>
         </aside>
 
-        <!-- Content -->
-        <main class="flex-1 p-6 overflow-y-auto">
+        <!-- Dynamic Content -->
+        <div class="flex-1 overflow-y-auto custom-scrollbar bg-primary-dark">
             @yield('Adash')
-        </main>
+        </div>
     </div>
 
     <script>
-        // Mobile menu toggle
-        document.getElementById('menuBtn').addEventListener('click', () => {
-            document.getElementById('mobileMenu').classList.toggle('hidden');
-        });
+        lucide.createIcons();
     </script>
-
-
+    @stack('scripts')
 </body>
-
-
 
 </html>

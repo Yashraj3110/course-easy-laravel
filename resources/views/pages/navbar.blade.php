@@ -37,7 +37,16 @@
 
               <!-- Authenticated User Links -->
               @auth
-                  <span class="text-gray-600 dark:text-gray-300 font-medium">Hello, {{ Auth::user()->name }}</span>
+                  @php
+                      $dashboardRoute = match(Auth::user()->role) {
+                          'admin' => 'dashboard.admin.home',
+                          'instructor' => 'dashboard.instructor.home',
+                          default => 'dashboard.student.home'
+                      };
+                  @endphp
+                  <a href="{{ route($dashboardRoute) }}" class="text-indigo-600 dark:text-indigo-400 font-bold hover:underline">My Dashboard</a>
+                  <span class="text-gray-400">|</span>
+                  <span class="text-gray-600 dark:text-gray-300 font-medium whitespace-nowrap">Hello, {{ Auth::user()->name }}</span>
 
                   <form method="POST" action="{{ route('logout') }}" class="inline">
                       @csrf
@@ -166,6 +175,21 @@
                       <input type="password" id="signup-password" name="password" required
                           class="w-full border border-gray-300 dark:border-gray-600 rounded-xl px-5 py-3 text-gray-800 dark:text-white bg-white dark:bg-gray-700 focus:ring-4 focus:ring-indigo-200 focus:border-indigo-500 dark:focus:ring-indigo-700 dark:focus:border-indigo-500 outline-none transition duration-200"
                           placeholder="Minimum 8 characters">
+                  </div>
+
+                  <div>
+                      <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">I want to join as</label>
+                      <div class="grid grid-cols-2 gap-4 mt-2">
+                          <label class="relative flex items-center justify-center p-3 rounded-xl border-2 border-gray-100 dark:border-gray-700 cursor-pointer hover:border-indigo-500 transition has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50 dark:has-[:checked]:bg-indigo-900/20 group">
+                              <input type="radio" name="role" value="student" checked class="hidden">
+                              <span class="text-sm font-bold text-gray-600 dark:text-gray-400 group-hover:text-indigo-600 transition">Student</span>
+                          </label>
+                          <label class="relative flex items-center justify-center p-3 rounded-xl border-2 border-gray-100 dark:border-gray-700 cursor-pointer hover:border-indigo-500 transition has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50 dark:has-[:checked]:bg-indigo-900/20 group">
+                              <input type="radio" name="role" value="instructor" class="hidden">
+                              <span class="text-sm font-bold text-gray-600 dark:text-gray-400 group-hover:text-indigo-600 transition">Instructor</span>
+                          </label>
+                      </div>
+                      <p class="text-[10px] text-gray-400 mt-2 font-medium">Note: Instructor accounts require admin approval.</p>
                   </div>
 
                   <button type="submit"

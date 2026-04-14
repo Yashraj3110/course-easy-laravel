@@ -78,15 +78,27 @@
                     <td class="p-3">{{ $user->name }}</td>
                     <td class="p-3">{{ $user->email }}</td>
                     <td class="p-3">
-                        @if($user->status == 'active')
-                            <span class="text-green-400">Active</span>
+                        @if($user->is_approved)
+                            <span class="text-green-400">Approved</span>
                         @else
-                            <span class="text-red-400">Inactive</span>
+                            <span class="text-yellow-400">Pending</span>
                         @endif
                     </td>
-                    <td class="p-3 space-x-2">
-                        <button class="text-blue-400 hover:underline">Edit</button>
-                        <button class="text-red-400 hover:underline">Ban</button>
+                    <td class="p-3 flex space-x-2">
+                        @if(!$user->is_approved)
+                            <form action="{{ route('users.approve', $user) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="text-green-400 hover:bg-green-400/10 px-3 py-1 rounded-lg border border-green-400/30 transition">Approve</button>
+                            </form>
+                        @endif
+                        <form action="{{ route('users.toggleRole', $user) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="text-blue-400 hover:bg-blue-400/10 px-3 py-1 rounded-lg border border-blue-400/30 transition">Make Student</button>
+                        </form>
+                        <form action="{{ route('users.destroy', $user) }}" method="POST" onsubmit="return confirm('Delete this user?')">
+                            @csrf @method('DELETE')
+                            <button type="submit" class="text-red-400 hover:bg-red-400/10 px-3 py-1 rounded-lg border border-red-400/30 transition">Delete</button>
+                        </form>
                     </td>
                 </tr>
                 @endforeach

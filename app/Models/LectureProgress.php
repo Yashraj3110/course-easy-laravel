@@ -10,23 +10,30 @@ class LectureProgress extends Model
     use HasFactory;
 
     protected $fillable = [
-        'lecture_id',
         'user_id',
-        'progress',
-        'completed_at',
+        'course_id',
+        'lecture_id',
+        'completed',
+        'watched_at',
     ];
 
     protected $casts = [
-        'completed_at' => 'datetime',
+        'completed'  => 'boolean',
+        'watched_at' => 'datetime',
     ];
-
-    public function lecture()
-    {
-        return $this->belongsTo(Lecture::class);
-    }
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
+    }
+
+    public function lecture()
+    {
+        return $this->belongsTo(Lecture::class);
     }
 }

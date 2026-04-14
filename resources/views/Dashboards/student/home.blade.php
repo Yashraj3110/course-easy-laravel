@@ -1,190 +1,203 @@
 @extends('Dashboards.student.dashboard')
 
 @section('Sdash')
-  
+<main class="flex-1 p-10 overflow-y-auto bg-[#050505] selection:bg-indigo-500 selection:text-white pb-32">
 
-<main class="flex-1 p-10 overflow-y-auto">
+    <!-- Premium Artistic Header -->
+    <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-20 relative">
+        <div class="absolute -top-20 -left-20 w-64 h-64 bg-indigo-600/10 rounded-full blur-[100px] pointer-events-none"></div>
+        
+        <div class="relative z-10 space-y-2">
+            <h2 class="text-5xl font-black text-white leading-tight tracking-tighter uppercase italic">
+                Focus, <span class="text-indigo-600">{{ explode(' ', Auth::user()->name)[0] }}.</span>
+            </h2>
+            <p class="text-[10px] font-black text-gray-500 uppercase tracking-[0.4em]">Operational Status: Learning Mode Active</p>
+        </div>
 
-    <header class="flex justify-between items-center mb-12">
-        <h2 class="text-4xl font-light text-white">Hello, <span class="font-bold">{{ Auth::user()->name }}</span>. Ready to learn?</h2>
-        <div class="flex items-center space-x-6">
-            <div class="relative">
-                <input type="text" placeholder="Search lessons, projects..."
-                    class="py-2 pl-10 pr-4 bg-secondary-dark border border-gray-700/50 rounded-full focus:ring-1 focus:ring-accent-gold focus:border-accent-gold text-sm text-gray-300 w-72 transition duration-300 shadow-inner-dark">
-                <svg class="icon absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"></path>
-                </svg>
+        <div class="flex items-center gap-4 relative z-10 w-full md:w-auto">
+            <div class="relative group flex-1 md:flex-none">
+                <input type="text" placeholder="SEARCH MY BLUEPRINTS..."
+                    class="w-full md:w-80 py-4 px-6 bg-white/[0.03] border border-white/5 rounded-2xl focus:ring-2 focus:ring-indigo-500 text-[10px] font-black tracking-widest text-gray-300 transition duration-300 uppercase outline-none">
+                <i data-lucide="search" class="absolute right-6 top-1/2 -translate-y-1/2 text-gray-500 w-4 h-4"></i>
             </div>
-            <button
-                class="relative p-2 rounded-full text-gray-300 hover:text-white hover:bg-gray-700/50 transition duration-300">
-                <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                    stroke-width="1.5" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M14.857 17.082a23.848 23.848 0 005.454-1.332 2.38 2.38 0 011.371 2.766c-.318 1.054-1.164 1.83-2.222 2.079-1.284.275-2.585.503-3.897.676-1.56.208-3.13.317-4.717.317h-.732c-1.587 0-3.157-.109-4.717-.317-1.312-.173-2.613-.401-3.897-.676-1.058-.249-1.904-1.025-2.222-2.079a2.38 2.38 0 011.371-2.766c1.037-.52 2.113-.974 3.207-1.332M9 13.5a3 3 0 110-6 3 3 0 010 6zm6.375 0a3 3 0 110-6 3 3 0 010 6z">
-                    </path>
-                </svg>
-                <span
-                    class="absolute top-1 right-1 block h-2.5 w-2.5 rounded-full ring-2 ring-primary-dark bg-red-500"></span>
+            <button class="p-4 rounded-2xl bg-white/[0.03] border border-white/5 text-gray-500 hover:text-white transition duration-300">
+                <i data-lucide="bell" class="w-5 h-5"></i>
             </button>
         </div>
     </header>
 
-    <section class="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-12">
+    <!-- Master Progress HUD -->
+    <section class="grid grid-cols-1 lg:grid-cols-4 gap-10 mb-20">
+        <div class="lg:col-span-3 relative group overflow-hidden bg-white/[0.02] border border-white/5 rounded-[3rem] p-12 transition hover:border-indigo-500/30">
+            <!-- Background Glow -->
+            <div class="absolute -bottom-20 -right-20 w-80 h-80 bg-indigo-600/10 rounded-full blur-[100px] transition group-hover:bg-indigo-600/20"></div>
+            
+            <div class="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-12">
+                <div class="space-y-6 flex-1">
+                    <div class="flex items-center gap-4">
+                        <span class="p-3 bg-indigo-600/10 rounded-2xl border border-indigo-600/20 text-indigo-500">
+                            <i data-lucide="activity" class="w-6 h-6"></i>
+                        </span>
+                        <h3 class="text-2xl font-black text-white uppercase tracking-tighter">Current Momentum</h3>
+                    </div>
+                    
+                    <div class="flex items-baseline gap-4">
+                        <span class="text-8xl font-black text-white tracking-tighter">{{ number_format($stats['avg_progress'], 0) }}%</span>
+                        <span class="text-xs font-black text-gray-500 uppercase tracking-widest italic">Global Average</span>
+                    </div>
 
-        <div
-            class="lg:col-span-3 p-8 bg-secondary-dark rounded-2xl shadow-xl border border-gray-700/50 flex items-center justify-between">
-            <div class="flex-grow">
-                <p class="text-lg font-medium text-gray-400 mb-2">My Learning Streak</p>
-                <div class="flex items-baseline space-x-2 mb-4">
-                    <span class="text-6xl font-extrabold text-accent-gold">27</span>
-                    <span class="text-2xl text-gray-400">Days</span>
+                    <div class="space-y-4">
+                        <div class="w-full bg-white/5 rounded-full h-2 overflow-hidden">
+                            <div class="h-full bg-indigo-600 rounded-full transition-all duration-1000 shadow-[0_0_20px_rgba(79,70,229,0.4)]" style="width: {{ $stats['avg_progress'] }}%"></div>
+                        </div>
+                        <p class="text-[9px] font-black text-gray-500 uppercase tracking-widest italic">Success metric: {{ $stats['completed'] }} Project modules fully integrated.</p>
+                    </div>
                 </div>
-                <div class="w-full bg-gray-700 rounded-full h-2">
-                    <div class="h-2 rounded-full bg-accent-gold" style="width: 90%"></div>
-                </div>
-                <p class="text-sm text-gray-400 mt-2">Almost reached your monthly goal! Keep it up.</p>
+
+                @if($enrollments->count() > 0)
+                    <div class="shrink-0">
+                        <a href="{{ route('student.course.learn', $enrollments->first()->course) }}" 
+                           class="group/btn relative py-6 px-12 bg-indigo-600 text-white font-black rounded-3xl text-center flex items-center gap-4 transition overflow-hidden">
+                            <span class="relative z-10 uppercase tracking-widest text-[10px]">Resume Last Blueprint</span>
+                            <i data-lucide="move-right" class="relative z-10 w-4 h-4 group-hover/btn:translate-x-2 transition"></i>
+                            <div class="absolute inset-x-0 bottom-0 h-0 group-hover/btn:h-full bg-white/10 transition-all duration-300"></div>
+                        </a>
+                    </div>
+                @endif
             </div>
-            <button
-                class="ml-8 py-3 px-8 bg-accent-gold text-primary-dark font-bold rounded-full hover:bg-yellow-500 shadow-lg transition duration-300 transform hover:scale-[1.02]">
-                Continue Course
-            </button>
         </div>
 
-        <div class="p-6 bg-secondary-dark rounded-2xl shadow-xl border border-gray-700/50">
-            <h3 class="text-xl font-semibold text-white mb-4">📅 Upcoming Tasks</h3>
-            <ul class="space-y-4">
-                <li class="flex items-start space-x-3 text-sm">
-                    <div class="w-2 h-2 mt-1.5 rounded-full bg-red-500 flex-shrink-0"></div>
-                    <div>
-                        <p class="font-medium text-white">Data Viz: **Module 4 Quiz**</p>
-                        <p class="text-xs text-gray-400">Due **Today** at 4:00 PM</p>
-                    </div>
-                </li>
-                <li class="flex items-start space-x-3 text-sm">
-                    <div class="w-2 h-2 mt-1.5 rounded-full bg-accent-blue flex-shrink-0"></div>
-                    <div>
-                        <p class="font-medium text-white">UI/UX: **Wireframe Submission**</p>
-                        <p class="text-xs text-gray-400">Due Wednesday, Nov 12</p>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </section>
-
-    <section class="mb-12">
-        <h3 class="text-2xl font-bold text-white mb-6">📚 My Learning Path</h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-
-            <div
-                class="bg-secondary-dark rounded-xl overflow-hidden shadow-xl border border-gray-700/50 transition duration-300 ring-2 ring-accent-gold/50">
-                <div class="h-32 bg-gray-700/50 flex items-center justify-center">
-                    <span class="text-4xl text-gray-500 font-light">CODE</span>
+        <!-- Quick Stats Grid -->
+        <div class="grid grid-cols-1 gap-6">
+            <div class="p-8 bg-white/[0.02] border border-white/5 rounded-[2.5rem] flex flex-col justify-between transition hover:border-indigo-500/20">
+                <div class="flex justify-between items-start">
+                    <span class="text-[10px] font-black text-gray-500 uppercase tracking-widest">Active <br> Artifacts</span>
+                    <i data-lucide="book-open" class="text-indigo-500 w-5 h-5 opacity-40"></i>
                 </div>
-                <div class="p-5">
-                    <h4 class="text-lg font-bold text-white mb-1">Advanced Python Programming</h4>
-                    <p class="text-sm text-gray-400 mb-4">Instructor: Dr. Maya Patel</p>
-                    <div class="w-full bg-gray-700 rounded-full h-1.5 mb-2">
-                        <div class="h-1.5 rounded-full bg-accent-gold transition-all duration-500" style="width: 75%">
-                        </div>
-                    </div>
-                    <div class="flex justify-between items-center text-xs text-gray-400">
-                        <span>**75%** Complete</span>
-                        <button class="text-accent-gold font-medium hover:underline">Open Lesson &rarr;</button>
-                    </div>
-                </div>
+                <h4 class="text-5xl font-black text-white tracking-tighter leading-none mt-4">{{ $stats['enrolled'] }}</h4>
             </div>
-
-            <div
-                class="bg-secondary-dark rounded-xl overflow-hidden shadow-xl border border-gray-700/50 hover:ring-2 hover:ring-accent-blue/50 transition duration-300">
-                <div class="h-32 bg-gray-700/50 flex items-center justify-center">
-                    <span class="text-4xl text-gray-500 font-light">DESIGN</span>
+            <div class="p-8 bg-white/[0.02] border border-white/5 rounded-[2.5rem] flex flex-col justify-between transition hover:border-indigo-500/20">
+                <div class="flex justify-between items-start">
+                    <span class="text-[10px] font-black text-gray-500 uppercase tracking-widest">Ownership <br> Proofs</span>
+                    <i data-lucide="award" class="text-indigo-500 w-5 h-5 opacity-40"></i>
                 </div>
-                <div class="p-5">
-                    <h4 class="text-lg font-bold text-white mb-1">Foundational UI/UX Principles</h4>
-                    <p class="text-sm text-gray-400 mb-4">Instructor: Alex Lee</p>
-                    <div class="w-full bg-gray-700 rounded-full h-1.5 mb-2">
-                        <div class="h-1.5 rounded-full bg-accent-blue transition-all duration-500" style="width: 30%">
-                        </div>
-                    </div>
-                    <div class="flex justify-between items-center text-xs text-gray-400">
-                        <span>**30%** Complete</span>
-                        <button class="text-accent-blue font-medium hover:underline">Open Course &rarr;</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-secondary-dark rounded-xl overflow-hidden shadow-xl border border-gray-700/50 opacity-70">
-                <div class="h-32 bg-gray-700/50 flex items-center justify-center">
-                    <span class="text-4xl text-gray-500 font-light">MARKET</span>
-                </div>
-                <div class="p-5">
-                    <h4 class="text-lg font-bold text-white mb-1">Introduction to SEO Strategy</h4>
-                    <p class="text-sm text-gray-400 mb-4">Instructor: Sarah Chen</p>
-                    <div class="w-full bg-gray-700 rounded-full h-1.5 mb-2">
-                        <div class="h-1.5 rounded-full bg-green-500" style="width: 100%"></div>
-                    </div>
-                    <div class="flex justify-between items-center text-xs text-gray-400">
-                        <span>**Completed**</span>
-                        <button class="text-green-500 font-medium hover:underline">View Certificate &rarr;</button>
-                    </div>
-                </div>
-            </div>
-
-            <div
-                class="p-5 bg-gray-800/50 border border-dashed border-gray-700 rounded-xl flex flex-col items-center justify-center text-center text-gray-500 hover:bg-gray-700/30 transition duration-300 cursor-pointer">
-                <svg class="icon w-8 h-8 mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                    stroke-width="1.5" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                <span class="text-sm font-medium">Explore New Courses</span>
+                <h4 class="text-5xl font-black text-white tracking-tighter leading-none mt-4">{{ $stats['certs'] }}</h4>
             </div>
         </div>
     </section>
 
+    <!-- My Repositories Section -->
+    <section class="mb-32">
+        <div class="flex justify-between items-end mb-12">
+            <div class="space-y-2">
+                <h3 class="text-3xl font-black text-white uppercase tracking-tighter">My Blueprints</h3>
+                <p class="text-[9px] font-black text-gray-500 uppercase tracking-[0.3em]">Persistent Learning Repository</p>
+            </div>
+            <a href="{{ route('dashboard.student.courses') }}" class="text-[10px] font-black text-indigo-500 uppercase tracking-widest hover:underline px-6 py-3 bg-white/[0.03] border border-white/5 rounded-xl transition">
+                Access All →
+            </a>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            @forelse($enrollments as $enrollment)
+                <div class="group bg-white/[0.02] rounded-[3rem] border border-white/5 overflow-hidden transition-all duration-700 hover:border-indigo-500/20 hover:-translate-y-4">
+                    <div class="relative h-48 overflow-hidden grayscale-[30%] group-hover:grayscale-0 transition duration-700">
+                        <img src="{{ $enrollment->course->thumbnail ? asset($enrollment->course->thumbnail) : 'https://placehold.co/600x400/1e293b/fff?text='.$enrollment->course->title }}" 
+                             class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent"></div>
+                        <div class="absolute bottom-6 left-8">
+                            <span class="px-3 py-1 bg-white/10 backdrop-blur rounded-lg text-[8px] font-black text-white uppercase tracking-widest border border-white/10">
+                                {{ strtoupper($enrollment->course->category) }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="p-10 space-y-8">
+                        <div>
+                             <h4 class="text-2xl font-black text-white mb-2 leading-none group-hover:text-indigo-500 transition line-clamp-1">{{ strtoupper($enrollment->course->title) }}</h4>
+                             <p class="text-[9px] font-black text-gray-500 uppercase tracking-widest italic">Instructed by {{ $enrollment->course->tutor->name }}</p>
+                        </div>
+                        
+                        <div class="space-y-4 pt-6 border-t border-white/5">
+                             <div class="flex justify-between items-end">
+                                 <span class="text-[9px] font-black text-gray-500 uppercase tracking-widest">Progress Integrity</span>
+                                 <span class="text-xl font-black text-white tracking-tighter">{{ $enrollment->progress_percent }}%</span>
+                             </div>
+                             <div class="w-full bg-white/5 rounded-full h-1">
+                                 <div class="h-full bg-indigo-600 rounded-full transition-all duration-700" style="width: {{ $enrollment->progress_percent }}%"></div>
+                             </div>
+                        </div>
+                        
+                        <a href="{{ route('student.course.learn', $enrollment->course) }}" 
+                           class="flex items-center justify-between py-5 px-8 bg-white/5 hover:bg-indigo-600 text-white font-black text-[9px] uppercase tracking-[0.2em] rounded-2xl transition duration-500 group/link shadow-xl">
+                           Project Entry
+                           <i data-lucide="arrow-right" class="w-4 h-4 group-hover/link:translate-x-2 transition"></i>
+                        </a>
+                    </div>
+                </div>
+            @empty
+                <div class="col-span-full py-32 text-center opacity-20 bg-white/[0.01] rounded-[4rem] border-2 border-dashed border-white/5">
+                    <i data-lucide="code-2" class="w-20 h-20 mx-auto mb-6 text-indigo-500"></i>
+                    <h4 class="text-4xl font-black uppercase tracking-tighter mb-4 italic">No Active Deployments</h4>
+                    <p class="text-xs font-black uppercase tracking-widest mb-10">Your personal repository is currently empty.</p>
+                    <a href="{{ route('courses') }}" class="inline-flex items-center gap-4 px-12 py-5 bg-white text-gray-900 font-black rounded-3xl uppercase tracking-widest text-[10px] hover:scale-105 transition">Explore Catalog</a>
+                </div>
+            @endforelse
+        </div>
+    </section>
+
+    <!-- Curator's Selection -->
     <section>
-        <h3 class="text-2xl font-bold text-white mb-6">🎯 Skills to Master Next</h3>
-        <div class="flex space-x-6 overflow-x-auto pb-4">
+        <div class="flex items-center gap-6 mb-12">
+            <h3 class="text-3xl font-black text-white uppercase tracking-tighter">Vault <br> Suggestions.</h3>
+            <div class="h-px bg-white/5 flex-1"></div>
+        </div>
 
-            <div
-                class="flex-shrink-0 w-72 p-5 bg-secondary-dark rounded-xl shadow-lg border border-gray-700/50 hover:shadow-2xl hover:border-accent-gold/50 transition duration-300 cursor-pointer">
-                <p class="text-sm text-accent-gold mb-1 font-semibold">Related to Python</p>
-                <h4 class="text-xl font-bold text-white mb-2">Machine Learning Basics</h4>
-                <p class="text-sm text-gray-400 mb-3">Learn to build predictive models using Scikit-learn.</p>
-                <div class="flex justify-between items-center">
-                    <span class="text-xs text-gray-500">4.9 ⭐ (8.2k reviews)</span>
-                    <button class="text-accent-blue font-semibold text-sm hover:text-white">Enroll &rarr;</button>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            @foreach($recommended as $course)
+                <div class="p-8 bg-white/[0.02] border border-white/5 rounded-[2.5rem] group hover:border-indigo-500/20 transition-all duration-500">
+                    <div class="flex justify-between items-start mb-6">
+                        <span class="text-[8px] font-black text-indigo-500 uppercase tracking-widest">{{ strtoupper($course->category) }}</span>
+                        <div class="flex items-center gap-1 text-[10px] font-black text-accent-gold">
+                            <i data-lucide="star" class="w-3 h-3 fill-accent-gold"></i>
+                            {{ number_format($course->rating, 1) }}
+                        </div>
+                    </div>
+                    <h4 class="text-lg font-black text-white mb-6 group-hover:text-indigo-500 transition leading-tight line-clamp-2">{{ strtoupper($course->title) }}</h4>
+                    
+                    <div class="flex justify-between items-center pt-6 border-t border-white/5">
+                        <span class="text-xl font-black text-white">
+                            {{ $course->price == 0 ? 'FREE' : '$'.number_format($course->price) }}
+                        </span>
+                        <a href="{{ route('courses.show', $course) }}" class="p-4 bg-white/5 rounded-2xl text-white hover:bg-indigo-600 transition shadow-lg group-hover:rotate-12">
+                            <i data-lucide="plus" class="w-4 h-4"></i>
+                        </a>
+                    </div>
                 </div>
-            </div>
-
-            <div
-                class="flex-shrink-0 w-72 p-5 bg-secondary-dark rounded-xl shadow-lg border border-gray-700/50 hover:shadow-2xl hover:border-accent-blue/50 transition duration-300 cursor-pointer">
-                <p class="text-sm text-accent-blue mb-1 font-semibold">New in Catalog</p>
-                <h4 class="text-xl font-bold text-white mb-2">Mastering React & Redux</h4>
-                <p class="text-sm text-gray-400 mb-3">Build modern, scalable front-end applications.</p>
-                <div class="flex justify-between items-center">
-                    <span class="text-xs text-gray-500">4.7 ⭐ (5.1k reviews)</span>
-                    <button class="text-accent-blue font-semibold text-sm hover:text-white">Enroll &rarr;</button>
-                </div>
-            </div>
-
-            <div
-                class="flex-shrink-0 w-72 p-5 bg-secondary-dark rounded-xl shadow-lg border border-gray-700/50 hover:shadow-2xl hover:border-accent-gold/50 transition duration-300 cursor-pointer">
-                <p class="text-sm text-accent-gold mb-1 font-semibold">For Career Growth</p>
-                <h4 class="text-xl font-bold text-white mb-2">Professional Project Management</h4>
-                <p class="text-sm text-gray-400 mb-3">Master Agile and Scrum methodologies.</p>
-                <div class="flex justify-between items-center">
-                    <span class="text-xs text-gray-500">4.6 ⭐ (12k reviews)</span>
-                    <button class="text-accent-blue font-semibold text-sm hover:text-white">Enroll &rarr;</button>
-                </div>
-            </div>
-
+            @endforeach
         </div>
     </section>
 
 </main>
 @endsection
 
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        lucide.createIcons();
+    });
+</script>
+<style>
+    body {
+        scrollbar-width: thin;
+        scrollbar-color: #4f46e5 #050505;
+    }
+    body::-webkit-scrollbar {
+        width: 6px;
+    }
+    body::-webkit-scrollbar-thumb {
+        background: #4f46e5;
+        border-radius: 10px;
+    }
+</style>
+@endpush

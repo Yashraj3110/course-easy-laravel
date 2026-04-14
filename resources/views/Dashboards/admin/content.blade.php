@@ -20,39 +20,53 @@
 
     {{-- Pending Content --}}
     <div id="pendingContent">
-        @foreach($contents->where('approval', 'pending') as $content)
-        <div class="p-4 bg-gray-800/40 border border-gray-700/50 rounded-xl flex justify-between mb-3">
-            <div>
-                <h2 class="text-white font-semibold">{{ $content->title }}</h2>
-                <p class="text-gray-400 text-sm">Submitted by: {{ $content->submitted_by }}</p>
+        @forelse($pending as $course)
+        <div class="p-6 bg-gray-800/40 border border-gray-700/50 rounded-2xl flex justify-between items-center mb-4 hover:border-gray-600 transition">
+            <div class="flex items-center gap-4">
+                <img src="{{ $course->thumbnail ? asset($course->thumbnail) : 'https://placehold.co/100x100/333/fff?text=Thumb' }}" class="w-16 h-16 rounded-xl object-cover">
+                <div>
+                    <h2 class="text-white font-bold text-lg">{{ $course->title }}</h2>
+                    <p class="text-gray-400 text-sm">Instructor: <span class="text-blue-400">{{ $course->tutor->name }}</span></p>
+                </div>
             </div>
-            <div class="space-x-2">
-                <button class="px-3 py-1 bg-green-600/50 rounded-lg text-white">Approve</button>
-                <button class="px-3 py-1 bg-red-600/50 rounded-lg text-white">Reject</button>
+            <div class="flex gap-2">
+                <form action="{{ route('courses.approve', $course) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="px-5 py-2 bg-green-600 hover:bg-green-700 rounded-xl text-white font-bold transition">Approve</button>
+                </form>
+                <form action="{{ route('courses.reject', $course) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="px-5 py-2 bg-red-600 hover:bg-red-700 rounded-xl text-white font-bold transition">Reject</button>
+                </form>
             </div>
         </div>
-        @endforeach
-        @if($contents->where('approval', 'pending')->isEmpty())
-        <p class="text-gray-400">No pending content.</p>
-        @endif
+        @empty
+        <div class="p-12 text-center bg-gray-800/20 rounded-2xl border border-dashed border-gray-700">
+            <p class="text-gray-500">No pending courses to review.</p>
+        </div>
+        @endforelse
     </div>
 
     {{-- Approved Content --}}
     <div id="approvedContent" class="hidden">
-        @foreach($contents->where('approval', 'approved') as $content)
-        <div class="p-4 bg-gray-800/40 border border-gray-700/50 rounded-xl flex justify-between mb-3">
-            <div>
-                <h2 class="text-white font-semibold">{{ $content->title }}</h2>
-                <p class="text-gray-400 text-sm">Submitted by: {{ $content->submitted_by }}</p>
+        @forelse($approved as $course)
+        <div class="p-6 bg-gray-800/40 border border-gray-700/50 rounded-2xl flex justify-between items-center mb-4">
+            <div class="flex items-center gap-4">
+                <img src="{{ $course->thumbnail ? asset($course->thumbnail) : 'https://placehold.co/100x100/333/fff?text=Thumb' }}" class="w-16 h-16 rounded-xl object-cover grayscale">
+                <div>
+                    <h2 class="text-white font-bold text-lg">{{ $course->title }}</h2>
+                    <p class="text-gray-400 text-sm">Instructor: {{ $course->tutor->name }}</p>
+                </div>
             </div>
             <div>
-                <span class="px-3 py-1 bg-green-600/50 rounded-lg text-white">Approved</span>
+                <span class="px-4 py-1.5 bg-green-500/20 text-green-400 rounded-lg border border-green-500/30 text-xs font-bold uppercase tracking-widest">Live</span>
             </div>
         </div>
-        @endforeach
-        @if($contents->where('approval', 'approved')->isEmpty())
-        <p class="text-gray-400">No approved content.</p>
-        @endif
+        @empty
+        <div class="p-12 text-center bg-gray-800/20 rounded-2xl border border-dashed border-gray-700">
+            <p class="text-gray-500">No approved courses yet.</p>
+        </div>
+        @endforelse
     </div>
 </div>
 

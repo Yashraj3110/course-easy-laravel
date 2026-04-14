@@ -4,10 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CourseEasy | Dashboard</title>
+    <title>CourseEasy | Student Portal</title>
     <link rel="icon" type="image/png" href="{{ asset('assets/image/image.png') }}">
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
 
     <script>
         tailwind.config = {
@@ -15,15 +16,10 @@
             theme: {
                 extend: {
                     colors: {
-                        // Softer, more aesthetic dark tones
-                        'primary-dark': '#0f172a', // Deep, modern navy-blue (slate-900)
-                        'secondary-dark': '#1e293b', // Lighter for cards/sidebar (slate-800)
-                        'accent-gold': '#facc15', // Vibrant, slightly deeper gold (amber-400)
-                        'accent-blue': '#6366f1', // Soft, modern indigo (indigo-500)
-                    },
-                    boxShadow: {
-                        // Subtle inner shadow for depth
-                        'inner-dark': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.4)',
+                        'primary-dark': '#0f172a', 
+                        'secondary-dark': '#1e293b', 
+                        'accent-gold': '#facc15', 
+                        'accent-blue': '#6366f1', 
                     }
                 }
             }
@@ -31,213 +27,136 @@
     </script>
 
     <style>
-        .icon {
-            width: 1.25rem;
-            height: 1.25rem;
-        }
-
-        /* Smooth, modern scrollbar */
-        .custom-scrollbar {
-            scrollbar-width: thin;
-            scrollbar-color: #3b82f6 #1e293b;
-            /* thumb + track */
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
         .custom-scrollbar::-webkit-scrollbar {
-            width: 8px;
+            width: 5px;
         }
 
         .custom-scrollbar::-webkit-scrollbar-track {
-            background: #1e293b;
+            background: transparent;
         }
 
         .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #3b82f6;
-            border-radius: 8px;
+            background: #334155;
+            border-radius: 10px;
         }
 
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #2563eb;
-        }
+        [x-cloak] { display: none !important; }
     </style>
 </head>
 
-<body class="bg-primary-dark text-gray-200 min-h-screen flex flex-col antialiased">
-    <!-- 🔹 Navbar -->
-    <nav class="bg-blue-900/40 border-b border-blue-700/50 shadow-md sticky top-0 z-50 backdrop-blur-xl">
-        <div class="flex justify-between items-center px-6 py-4">
+<body class="bg-primary-dark text-gray-200 min-h-screen antialiased flex flex-col">
 
-            <!-- Desktop -->
-            <div class="hidden md:flex items-center space-x-4">
-                <a href="{{ route('home') }}"
-                    class="text-3xl font-extrabold bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500
-                text-transparent bg-clip-text tracking-tight">
-                    Course<span class="text-gray-200">Easy</span>
-                </a>
-                <div class="w-px h-8 bg-blue-600/40"></div>
-
-                <h1
-                    class="text-xl font-semibold tracking-wide uppercase
-                bg-gradient-to-r from-blue-400 via-cyan-400 to-green-400
-                text-transparent bg-clip-text drop-shadow-sm">
-                    Student Dashboard
-                </h1>
+    <!-- Top Navigation -->
+    <nav class="sticky top-0 z-50 bg-primary-dark/80 backdrop-blur-xl border-b border-gray-800 px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-8">
+            <a href="{{ route('home') }}" class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-accent-blue rounded-xl flex items-center justify-center shadow-lg shadow-accent-blue/20">
+                    <i data-lucide="graduation-cap" class="text-white w-6 h-6"></i>
+                </div>
+                <span class="text-2xl font-black text-white tracking-tighter">CourseEasy</span>
+            </a>
+            
+            <div class="hidden lg:flex items-center gap-1 bg-secondary-dark rounded-xl p-1 border border-gray-700">
+                <a href="{{ route('courses') }}" class="px-4 py-2 text-sm font-bold text-gray-400 hover:text-white transition">Explore</a>
+                <a href="#" class="px-4 py-2 bg-gray-700 text-sm font-bold text-white rounded-lg shadow-sm">My Learning</a>
             </div>
+        </div>
 
-            <!-- Mobile -->
-            <div class="md:hidden flex items-center space-x-3 flex-1">
-                <a href="{{ route('home') }}"
-                    class="text-2xl font-extrabold bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500
-                text-transparent bg-clip-text tracking-tight">
-                    Course<span class="text-gray-200">Easy</span>
-                </a>
-
-                <div class="w-px h-6 bg-blue-600/40"></div>
-
-                <span
-                    class="text-sm font-semibold tracking-wide uppercase
-                bg-gradient-to-r from-blue-400 via-cyan-400 to-green-400
-                text-transparent bg-clip-text drop-shadow-sm">
-                    Student Dashboard
-                </span>
+        <div class="flex items-center gap-6">
+            <div class="hidden sm:flex flex-col items-end">
+                <span class="text-sm font-bold text-white leading-none">{{ Auth::user()->name }}</span>
+                <span class="text-[10px] font-black text-accent-gold uppercase tracking-widest mt-1">Student Pioneer</span>
             </div>
-
-            <div class="hidden md:flex items-center space-x-6">
-                <img src="{{ asset(Auth::user()->photo) }}"
-                    class="w-9 h-9 rounded-full object-cover border border-blue-600" alt="Profile">
-                <!-- Logout Button -->
-                <form method="POST" action="{{ route('logout') }}" class="inline">
-                      @csrf
-                      <button type="submit"
-                          class="bg-red-500 text-white px-4 py-2 rounded-xl font-bold hover:bg-red-600 transition-all duration-300 shadow-md shadow-red-500/30 focus:outline-none focus:ring-4 focus:ring-red-300">
-                          Logout
-                      </button>
-                  </form>
+            <div class="relative group">
+                <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=6366f1&color=fff" 
+                     class="w-10 h-10 rounded-xl border-2 border-gray-700 group-hover:border-accent-blue transition cursor-pointer">
+                
+                <!-- Dropdown -->
+                <div class="absolute right-0 mt-3 w-56 bg-secondary-dark border border-gray-700 rounded-2xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 p-2">
+                    <a href="{{ route('dashboard.student.profile') }}" class="flex items-center gap-3 p-3 text-sm font-medium hover:bg-gray-700 rounded-xl transition text-gray-300">
+                        <i data-lucide="user" class="w-4 h-4 text-accent-blue"></i> Profile
+                    </a>
+                    <a href="{{ route('dashboard.student.settings') }}" class="flex items-center gap-3 p-3 text-sm font-medium hover:bg-gray-700 rounded-xl transition text-gray-300">
+                        <i data-lucide="settings" class="w-4 h-4 text-accent-blue"></i> Account Settings
+                    </a>
+                    <div class="h-px bg-gray-700 my-1"></div>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="w-full flex items-center gap-3 p-3 text-sm font-bold text-red-400 hover:bg-red-500/10 rounded-xl transition">
+                            <i data-lucide="log-out" class="w-4 h-4"></i> Logout
+                        </button>
+                    </form>
+                </div>
             </div>
-
-            <button onclick="toggleSidebar()" class="md:hidden p-2 rounded-md hover:bg-blue-700/40">
-                <svg class="w-7 h-7" fill="none" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-            </button>
-
         </div>
     </nav>
 
-
-    <!-- 🔹 Main Layout -->
-    <div class="flex flex-col md:flex-row min-h-screen">
-
+    <div class="flex flex-1 overflow-hidden">
+        
         <!-- Sidebar -->
-        <aside
-            class="hidden md:flex w-64 fixed top-16 left-0 h-[calc(100vh-4rem)]
-    bg-gradient-to-b from-blue-900/40 via-blue-950/40 to-blue-900/40
-    backdrop-blur-xl
-    border-r border-blue-800/40
-    shadow-2xl
-    p-0">
+        <aside class="hidden md:flex flex-col w-64 bg-primary-dark border-r border-gray-800 p-6">
+            <nav class="space-y-2 flex-1">
+                <p class="px-3 text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 mb-4">Main Menu</p>
+                
+                @php
+                    $menuItems = [
+                        ['route' => 'dashboard.student.home', 'icon' => 'layout-dashboard', 'label' => 'Dashboard'],
+                        ['route' => 'dashboard.student.courses', 'icon' => 'book-open', 'label' => 'My Courses'],
+                        ['route' => 'dashboard.student.certificates', 'icon' => 'award', 'label' => 'Certificates'],
+                        ['route' => 'dashboard.student.discussions', 'icon' => 'message-square', 'label' => 'Discussions'],
+                    ];
+                @endphp
 
-
-            <div class="w-full h-full overflow-y-auto p-6 custom-scrollbar">
-
-                <nav class="space-y-2">
-
-                    <!-- Dashboard -->
-                    <!-- Dashboard -->
-                    <a href="{{ route('dashboard.student.home') }}"
-                        class="flex items-center space-x-3 p-3 rounded-xl transition duration-200
-        {{ request()->routeIs('dashboard.student.home')
-            ? 'bg-accent-blue/20 text-accent-gold font-semibold ring-2 ring-accent-blue/70'
-            : 'text-gray-400 hover:bg-gray-700/50 hover:text-white' }}">
-                        <svg class="icon w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                            stroke-width="2" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M3.75 3v11.55l7.5-3.75 7.5 3.75V3M18.75 6.75l-7.5 3.75-7.5-3.75" />
-                        </svg>
-                        <span>Dashboard</span>
+                @foreach($menuItems as $item)
+                    <a href="{{ route($item['route']) }}" 
+                       class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition {{ request()->routeIs($item['route']) ? 'bg-accent-blue text-white shadow-lg shadow-accent-blue/20' : 'text-gray-400 hover:bg-secondary-dark hover:text-white' }}">
+                        <i data-lucide="{{ $item['icon'] }}" class="w-5 h-5"></i>
+                        {{ $item['label'] }}
                     </a>
+                @endforeach
 
-                    <!-- My Courses -->
-                    <a href="{{ route('dashboard.student.courses') }}"
-                        class="flex items-center space-x-3 p-3 rounded-xl transition duration-200
-        {{ request()->routeIs('dashboard.student.courses')
-            ? 'bg-accent-blue/20 text-accent-gold font-semibold ring-2 ring-accent-blue/70'
-            : 'text-gray-400 hover:bg-gray-700/50 hover:text-white' }}">
-                        <svg class="icon w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                            stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M12 6.042A8.967 8.967 0 006 3.75c-4.18 0-7.5 2.193-7.5 5.25 0 2.433 1.8 4.47 4.394 5.093l-.326 3.193a.75.75 0 001.076.626l1.62-1.079A9 9 0 0012 18z" />
-                        </svg>
-                        <span>My Courses</span>
-                    </a>
+                <p class="px-3 text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 mb-4 mt-10">Account</p>
+                <a href="{{ route('dashboard.student.profile') }}" 
+                   class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition {{ request()->routeIs('dashboard.student.profile') ? 'bg-accent-blue text-white shadow-lg shadow-accent-blue/20' : 'text-gray-400 hover:bg-secondary-dark hover:text-white' }}">
+                    <i data-lucide="user" class="w-5 h-5"></i>
+                    Profile
+                </a>
+                <a href="{{ route('dashboard.student.settings') }}" 
+                   class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition {{ request()->routeIs('dashboard.student.settings') ? 'bg-accent-blue text-white shadow-lg shadow-accent-blue/20' : 'text-gray-400 hover:bg-secondary-dark hover:text-white' }}">
+                    <i data-lucide="settings" class="w-5 h-5"></i>
+                    Settings
+                </a>
+            </nav>
 
-                    <!-- Certificates -->
-                    <a href="{{ route('dashboard.student.certificates') }}"
-                        class="flex items-center space-x-3 p-3 rounded-xl transition duration-200
-        {{ request()->routeIs('dashboard.student.certificates')
-            ? 'bg-accent-blue/20 text-accent-gold font-semibold ring-2 ring-accent-blue/70'
-            : 'text-gray-400 hover:bg-gray-700/50 hover:text-white' }}">
-                        <svg class="icon w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                            stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-3.75H4.5m4.5-3H4.5m4.5-3H4.5m4.5-3H4.5M18 19.5a2.25 2.25 0 002.25-2.25V5.25A2.25 2.25 0 0018 3H6a2.25 2.25 0 00-2.25 2.25v12A2.25 2.25 0 006 19.5h12zm-8.25-3.75h-.008v.008H9.75v-.008zM12 21.75a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z" />
-                        </svg>
-                        <span>Certificates</span>
-                    </a>
-
-                    <!-- Discussions -->
-                    <a href="{{ route('dashboard.student.discussions') }}"
-                        class="flex items-center space-x-3 p-3 rounded-xl transition duration-200
-        {{ request()->routeIs('dashboard.student.discussions')
-            ? 'bg-accent-blue/20 text-accent-gold font-semibold ring-2 ring-accent-blue/70'
-            : 'text-gray-400 hover:bg-gray-700/50 hover:text-white' }}">
-                        <svg class="icon w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                            stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M21 21L15 15M10.5 5a5.5 5.5 0 110 11 5.5 5.5 0 010-11z" />
-                        </svg>
-                        <span>Discussions</span>
-                    </a>
-
-                    <div class="h-px bg-gray-700/50 my-6"></div>
-
-                    <!-- Settings -->
-                    <a href="{{ route('dashboard.student.settings') }}"
-                        class="flex items-center space-x-3 p-3 rounded-xl transition duration-200
-        {{ request()->routeIs('dashboard.student.settings')
-            ? 'bg-accent-blue/20 text-accent-gold font-semibold ring-2 ring-accent-blue/70'
-            : 'text-gray-400 hover:bg-gray-700/50 hover:text-white' }}">
-                        <svg class="icon w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                            stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0M3.75 18H7.5" />
-                        </svg>
-                        <span>Settings</span>
-                    </a>
-
-                </nav>
+            <!-- Learning Goal Card -->
+            <div class="mt-auto p-4 bg-gradient-to-br from-indigo-900/50 to-blue-900/50 rounded-2xl border border-indigo-700/30">
+                <div class="flex items-center gap-2 mb-3">
+                    <i data-lucide="star" class="w-4 h-4 text-accent-gold fill-accent-gold"></i>
+                    <span class="text-[10px] font-black uppercase tracking-tighter text-white">Daily Goal</span>
+                </div>
+                <p class="text-xs text-indigo-200 mb-3 leading-snug">You're <b>45 mins</b> away from your daily goal!</p>
+                <div class="w-full bg-indigo-950 rounded-full h-1.5 mb-1">
+                    <div class="h-1.5 bg-accent-gold rounded-full" style="width: 65%"></div>
+                </div>
             </div>
-
         </aside>
 
-
-        <!-- Content -->
-
-        <main class="flex-1 md:ml-64 p-6 overflow-y-auto">
+        <!-- Dynamic Content -->
+        <div class="flex-1 overflow-y-auto custom-scrollbar">
             @yield('Sdash')
-        </main>
+        </div>
     </div>
 
-    {{-- <script>
-        // Mobile menu toggle
-        document.getElementById('menuBtn').addEventListener('click', () => {
-            document.getElementById('mobileMenu').classList.toggle('hidden');
-        });
-    </script> --}}
-
+    <script>
+        lucide.createIcons();
+    </script>
     @stack('scripts')
 </body>
-
-
 
 </html>

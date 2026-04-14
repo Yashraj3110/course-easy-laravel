@@ -1,123 +1,98 @@
 @extends('Dashboards.instructor.dashboard')
 
 @section('Idash')
-    <main class="flex-1 p-10 overflow-y-auto">
-        <div class="space-y-6">
+<main class="flex-1 p-10 overflow-y-auto bg-primary-dark">
 
-            {{-- Page Header --}}
-            <div class="flex justify-between items-center">
-                <h1 class="text-3xl font-bold text-accent-gold">My Courses</h1>
-
-                <a href="{{ route('courses.create') }}"
-                    class="px-5 py-3 bg-accent-gold text-primary-dark font-bold rounded-xl hover:bg-yellow-500">
-                    New Course
-                </a>
-
-            </div>
-
-            {{-- Courses Grid --}}
-            {{-- Courses Grid --}}
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-
-                @forelse ($courses as $course)
-                    <div
-                        class="bg-secondary-dark/40 rounded-2xl overflow-hidden border border-gray-700/50 shadow-xl
-                   hover:shadow-2xl hover:scale-[1.01] transition-transform duration-200">
-
-                        {{-- Thumbnail --}}
-                        <div class="h-40 bg-gray-800">
-                            <img src="{{ $course->thumbnail ? asset($course->thumbnail) : 'https://source.unsplash.com/random/800x600?education' }}"
-                                class="w-full h-full object-cover opacity-90 hover:opacity-100 transition" />
-                        </div>
-
-
-                        <div class="p-5 space-y-3">
-                            {{-- Title --}}
-                            <h3 class="text-xl font-semibold text-accent-gold">
-                                {{ $course->title }}
-                            </h3>
-
-                            {{-- Description --}}
-                            <p class="text-gray-400 text-sm line-clamp-2">
-                                {{ $course->description }}
-                            </p>
-
-                            {{-- Meta --}}
-                            <div class="flex items-center justify-between text-sm text-gray-400">
-                                <span>₹{{ number_format($course->price) }}</span>
-                                <span class="capitalize">{{ $course->difficulty }}</span>
-                            </div>
-
-                            {{-- Status --}}
-                            <div class="text-xs text-gray-500">
-                                Status:
-                                <span class="capitalize font-medium">
-                                    {{ $course->status }}
-                                </span>
-                            </div>
-
-                            {{-- Actions --}}
-                            <div class="pt-4 flex justify-between">
-                                <a href="{{ route('courses.edit', $course->id) }}"
-                                    class="px-3 py-2 text-sm bg-accent-blue/20 border border-accent-blue/50
-          rounded-lg text-accent-blue hover:bg-accent-blue/30 transition">
-                                    Edit
-                                </a>
-
-
-
-                                <a href=""
-                                    class="px-3 py-2 text-sm bg-gray-700/40 border border-gray-600
-                               rounded-lg hover:bg-gray-700/60 transition">
-                                    View
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                @empty
-                    <div class="col-span-full text-center text-gray-400 py-16">
-                        No courses created yet.
-                    </div>
-                @endforelse
-
-            </div>
-
+    <header class="flex justify-between items-center mb-12">
+        <div>
+            <h2 class="text-4xl font-light text-white">My <span class="font-bold text-instructor-purple track-tighter">Content</span></h2>
+            <p class="text-gray-400 mt-2">Manage and monitor all your published and draft courses.</p>
         </div>
+        <div class="flex items-center space-x-4">
+            <a href="{{ route('courses.create') }}" class="py-4 px-8 bg-instructor-purple text-white font-black rounded-2xl hover:bg-opacity-90 shadow-xl shadow-instructor-purple/20 transition transform active:scale-95 flex items-center gap-2 uppercase tracking-widest text-xs">
+                <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                New Course
+            </a>
+        </div>
+    </header>
 
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        @forelse($courses as $course)
+            <div class="bg-secondary-dark rounded-[2.5rem] border border-gray-700/50 shadow-2xl overflow-hidden group hover:border-instructor-purple/30 transition-all duration-500 flex flex-col">
+                <!-- Thumbnail Area -->
+                <div class="relative h-56 overflow-hidden">
+                    <img src="{{ $course->thumbnail ? asset($course->thumbnail) : 'https://placehold.co/800x600/1e293b/fff?text='.$course->title }}" 
+                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-secondary-dark via-transparent to-transparent"></div>
+                    
+                    <!-- Status Badge -->
+                    <div class="absolute top-4 right-4 flex gap-2">
+                        <span class="px-3 py-1 bg-primary-dark/80 backdrop-blur-md rounded-full text-[10px] font-black uppercase tracking-widest text-white border border-white/10">
+                            {{ $course->status }}
+                        </span>
+                        @if($course->approval === 'approved')
+                            <span class="px-3 py-1 bg-green-500/80 backdrop-blur-md rounded-full text-[10px] font-black uppercase tracking-widest text-white border border-green-400/20">
+                                Published
+                            </span>
+                        @else
+                            <span class="px-3 py-1 bg-red-500/80 backdrop-blur-md rounded-full text-[10px] font-black uppercase tracking-widest text-white border border-red-400/20">
+                                {{ $course->approval }}
+                            </span>
+                        @endif
+                    </div>
+                </div>
 
+                <!-- Content Area -->
+                <div class="p-8 flex-1 flex flex-col">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="text-[10px] font-black text-instructor-purple uppercase tracking-[0.2em] bg-instructor-purple/10 px-3 py-1 rounded-lg border border-instructor-purple/20">{{ $course->difficulty }}</span>
+                        <span class="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] px-1 line-clamp-1">{{ $course->category }}</span>
+                    </div>
+                    
+                    <h3 class="text-xl font-bold text-white mb-3 group-hover:text-instructor-purple transition-colors line-clamp-2 leading-snug">
+                        {{ $course->title }}
+                    </h3>
+                    
+                    <p class="text-sm text-gray-500 line-clamp-2 mb-6 leading-relaxed">
+                        {{ $course->description }}
+                    </p>
 
-    </main>
+                    <!-- Stats -->
+                    <div class="grid grid-cols-2 gap-4 mt-auto pt-6 border-t border-gray-800">
+                        <div class="flex flex-col">
+                            <span class="text-[9px] font-black text-gray-600 uppercase tracking-[0.2em]">Enrolled</span>
+                            <span class="text-sm font-bold text-white">{{ $course->enrollments_count ?? 0 }} Students</span>
+                        </div>
+                        <div class="flex flex-col text-right">
+                            <span class="text-[9px] font-black text-gray-600 uppercase tracking-[0.2em]">Rating</span>
+                            <span class="text-sm font-bold text-accent-gold flex items-center justify-end gap-1">
+                                <i data-lucide="star" class="w-3 h-3 fill-accent-gold"></i>
+                                {{ number_format($course->rating, 1) }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="grid grid-cols-2 gap-3 mt-8">
+                        <a href="{{ route('courses.edit', $course) }}" class="flex items-center justify-center gap-2 py-3 bg-gray-800 text-white text-xs font-black rounded-xl hover:bg-gray-700 transition uppercase tracking-widest">
+                            <i data-lucide="edit-3" class="w-4 h-4"></i>
+                            Edit
+                        </a>
+                        <a href="{{ route('courses.show', $course) }}" class="flex items-center justify-center gap-2 py-3 bg-instructor-purple/10 text-instructor-purple text-xs font-black rounded-xl hover:bg-instructor-purple hover:text-white transition uppercase tracking-widest border border-instructor-purple/20">
+                            <i data-lucide="eye" class="w-4 h-4"></i>
+                            View
+                        </a>
+                    </div>
+                </div>
+            </div>
+        @empty
+            <div class="col-span-full py-32 text-center opacity-30">
+                <i data-lucide="book-x" class="w-20 h-20 mx-auto mb-6"></i>
+                <h3 class="text-2xl font-black uppercase tracking-[0.3em] mb-2 text-white">No Courses Found</h3>
+                <p class="text-gray-400">Time to create your first masterpiece!</p>
+            </div>
+        @endforelse
+    </div>
+
+</main>
 @endsection
-
-@push('scriptsdash')
-    <script>
-        let formMode = 'edit'; // default
-
-        
-        // ---------- SUBMIT ----------
-        document.getElementById('editCourseForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            let courseId = document.getElementById('course_id').value;
-            let formData = new FormData(this);
-
-            let url = formMode === 'create' ?
-                `/instructor/courses` :
-                `/instructor/courses/${courseId}`;
-
-            fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: formData
-                })
-                .then(res => res.json())
-                .then(res => {
-                    if (res.status) {
-                        location.reload();
-                    }
-                });
-        });
-    </script>
-@endpush

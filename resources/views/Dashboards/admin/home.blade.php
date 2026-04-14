@@ -1,157 +1,133 @@
 @extends('Dashboards.admin.dashboard')
 
 @section('Adash')
-    <main class="flex-1 p-10 overflow-y-auto">
+<main class="flex-1 p-10 overflow-y-auto">
 
-        <header class="flex justify-between items-center mb-12">
-            <h2 class="text-4xl font-light text-white">Admin Control, <span class="font-bold">CEO</span></h2>
-            <div class="flex items-center space-x-6">
-                <button
-                    class="py-2 px-4 bg-accent-blue text-white font-semibold rounded-full hover:bg-indigo-600 transition duration-300 flex items-center space-x-2">
-                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    <span>Quick Action</span>
-                </button>
-            </div>
-        </header>
-
-        <section class="mb-12">
-            <h3 class="text-2xl font-bold text-white mb-6">⚙️ System & User Health</h3>
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-
-                <div class="p-6 bg-secondary-dark rounded-xl shadow-xl border border-gray-700/50">
-                    <p class="text-lg font-medium text-gray-400 mb-1">Total Users</p>
-                    <span class="text-4xl font-extrabold text-accent-blue">145,890</span>
-                    <p class="text-sm text-gray-500 mt-1">↗ 1,200 this week</p>
-                </div>
-
-                <div class="p-6 bg-secondary-dark rounded-xl shadow-xl border border-gray-700/50">
-                    <p class="text-lg font-medium text-gray-400 mb-1">New Instructors</p>
-                    <span class="text-4xl font-extrabold text-accent-gold">14</span>
-                    <p class="text-sm text-gray-500 mt-1">Pending Approval</p>
-                </div>
-
-                <div class="p-6 bg-secondary-dark rounded-xl shadow-xl border border-gray-700/50">
-                    <p class="text-lg font-medium text-gray-400 mb-1">Course Approvals</p>
-                    <span class="text-4xl font-extrabold text-accent-gold">22</span>
-                    <p class="text-sm text-gray-500 mt-1">Pending Review</p>
-                </div>
-
-                <div class="p-6 bg-secondary-dark rounded-xl shadow-xl border border-gray-700/50">
-                    <p class="text-lg font-medium text-gray-400 mb-1">Server Health</p>
-                    <div class="flex items-center space-x-3">
-                        <span class="text-4xl font-extrabold text-accent-green">99.9%</span>
-                        <span
-                            class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-accent-green/20 text-accent-green">
-                            Operational
-                        </span>
-                    </div>
-                    <p class="text-sm text-gray-500 mt-1">Average Uptime (30d)</p>
+    <header class="flex justify-between items-center mb-12">
+        <div>
+            <h2 class="text-4xl font-light text-white">System <span class="font-bold text-red-500">Administrator</span></h2>
+            <p class="text-gray-400 mt-2 italic">"Efficiency is doing things right; effectiveness is doing the right things."</p>
+        </div>
+        <div class="flex items-center space-x-6">
+            <div class="flex items-center bg-secondary-dark rounded-2xl p-1 border border-gray-700 shadow-2xl">
+                <div class="px-6 py-3">
+                    <p class="text-[10px] font-black uppercase text-gray-500 tracking-widest">Platform Status</p>
+                    <p class="text-xs font-bold text-green-500 flex items-center gap-1">
+                        <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
+                        Healthy
+                    </p>
                 </div>
             </div>
-        </section>
+        </div>
+    </header>
 
-        <section class="mb-12">
-            <h3 class="text-2xl font-bold text-white mb-6">💰 Financial Summary</h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-                <div class="p-6 bg-secondary-dark rounded-xl shadow-xl border border-gray-700/50">
-                    <p class="text-lg font-medium text-gray-400 mb-1">Platform Revenue (MTD)</p>
-                    <div class="flex items-end justify-between">
-                        <span class="text-3xl font-extrabold text-accent-green">$98,345</span>
-                        <span class="text-sm font-semibold text-accent-green">+8.5%</span>
-                    </div>
-                </div>
-
-                <div class="p-6 bg-secondary-dark rounded-xl shadow-xl border border-gray-700/50">
-                    <p class="text-lg font-medium text-gray-400 mb-1">Instructor Payouts</p>
-                    <div class="flex items-end justify-between">
-                        <span class="text-3xl font-extrabold text-white">$42,100</span>
-                        <button class="text-sm font-semibold text-accent-gold hover:underline">Run Payouts</button>
-                    </div>
-                </div>
-
-                <div class="p-6 bg-secondary-dark rounded-xl shadow-xl border border-gray-700/50">
-                    <p class="text-lg font-medium text-gray-400 mb-1">Refund Rate (30d)</p>
-                    <div class="flex items-end justify-between">
-                        <span class="text-3xl font-extrabold text-accent-red">2.1%</span>
-                        <span class="text-sm font-semibold text-accent-red">↑ 0.3%</span>
-                    </div>
-                </div>
+    <!-- High Level Metrics -->
+    <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+        <div class="p-8 bg-secondary-dark rounded-[2.5rem] border border-gray-700/50 shadow-2xl relative overflow-hidden group">
+            <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition">
+                <i data-lucide="users" class="w-16 h-16 text-white"></i>
             </div>
-        </section>
-
-
-        <section class="mb-12">
-            <h3 class="text-2xl font-bold text-white mb-6">✅ Pending Actions</h3>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-                <div class="p-6 bg-secondary-dark rounded-xl shadow-xl border border-gray-700/50">
-                    <h4 class="text-xl font-bold text-white mb-4">New Course Review Queue (15)</h4>
-                    <ul class="space-y-3 divide-y divide-gray-700/50">
-                        <li class="pt-3 flex justify-between items-center">
-                            <span class="text-sm text-white">**Web Dev:** Modern JavaScript Frameworks</span>
-                            <a href="#" class="text-accent-blue hover:text-white text-sm font-medium">Review
-                                &rarr;</a>
-                        </li>
-                        <li class="pt-3 flex justify-between items-center">
-                            <span class="text-sm text-white">**Art:** Advanced Digital Painting Techniques</span>
-                            <a href="#" class="text-accent-blue hover:text-white text-sm font-medium">Review
-                                &rarr;</a>
-                        </li>
-                        <li class="pt-3 flex justify-between items-center">
-                            <span class="text-sm text-white">**Business:** Financial Modeling with Excel</span>
-                            <a href="#" class="text-accent-blue hover:text-white text-sm font-medium">Review
-                                &rarr;</a>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="p-6 bg-secondary-dark rounded-xl shadow-xl border border-gray-700/50">
-                    <h4 class="text-xl font-bold text-white mb-4">Support & Moderation</h4>
-                    <div class="space-y-4">
-                        <div class="p-4 bg-gray-700/50 rounded-lg">
-                            <p class="text-sm font-medium text-white flex justify-between">
-                                Open Support Tickets: <span class="text-accent-gold font-bold">45</span>
-                            </p>
-                            <a href="#" class="text-xs text-accent-blue hover:underline">View Ticket Queue</a>
-                        </div>
-                        <div class="p-4 bg-gray-700/50 rounded-lg">
-                            <p class="text-sm font-medium text-white flex justify-between">
-                                Banned Accounts (30d): <span class="text-accent-red font-bold">8</span>
-                            </p>
-                            <a href="#" class="text-xs text-accent-red hover:underline">Manage Bans & Reports</a>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-        <div class="p-6">
-            <h1 class="text-2xl font-semibold text-white mb-4">Summary</h1>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-                <!-- Total Users -->
-                <div class="p-5 bg-gray-800/50 rounded-xl border border-gray-700/50">
-                    <h2 class="text-gray-300">Total Users</h2>
-                    <p class="text-3xl font-bold text-accent-gold mt-2">12,540</p>
-                </div>
-
-                <!-- Pending Approvals -->
-                <div class="p-5 bg-gray-800/50 rounded-xl border border-gray-700/50">
-                    <h2 class="text-gray-300">Pending Content</h2>
-                    <p class="text-3xl font-bold text-accent-blue mt-2">34</p>
-                </div>
-
-            </div>
-
+            <p class="text-gray-500 text-xs font-black uppercase tracking-widest mb-2">Total Students</p>
+            <h3 class="text-4xl font-black text-white mb-2">{{ number_format($stats['total_students']) }}</h3>
+            <p class="text-[10px] text-accent-blue font-black uppercase">+{{ number_format($recent_users->count()) }} new this week</p>
         </div>
 
-    </main>
+        <div class="p-8 bg-secondary-dark rounded-[2.5rem] border border-gray-700/50 shadow-2xl relative overflow-hidden group">
+            <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition">
+                <i data-lucide="graduation-cap" class="w-16 h-16 text-white"></i>
+            </div>
+            <p class="text-gray-500 text-xs font-black uppercase tracking-widest mb-2">Instructors</p>
+            <h3 class="text-4xl font-black text-white mb-2">{{ number_format($stats['total_instructors']) }}</h3>
+             <p class="text-[10px] text-accent-gold font-black uppercase">{{ $stats['pending_instructors'] }} awaiting approval</p>
+        </div>
+
+        <div class="p-8 bg-secondary-dark rounded-[2.5rem] border border-gray-700/50 shadow-2xl relative overflow-hidden group">
+            <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition">
+                <i data-lucide="book-open" class="w-16 h-16 text-white"></i>
+            </div>
+            <p class="text-gray-500 text-xs font-black uppercase tracking-widest mb-2">Review Queue</p>
+            <h3 class="text-4xl font-black text-white mb-2 ml-1">{{ $stats['pending_approvals'] }}</h3>
+            <p class="text-[10px] text-red-500 font-black uppercase">Courses pending review</p>
+        </div>
+
+        <div class="p-8 bg-secondary-dark rounded-[2.5rem] border border-gray-700/50 shadow-2xl relative overflow-hidden group">
+            <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition">
+                <i data-lucide="dollar-sign" class="w-16 h-16 text-white"></i>
+            </div>
+            <p class="text-gray-500 text-xs font-black uppercase tracking-widest mb-2">Total Revenue</p>
+            <h3 class="text-4xl font-black text-white mb-2">${{ number_format($stats['total_revenue'], 2) }}</h3>
+            <p class="text-[10px] text-green-500 font-black uppercase">Platform Total</p>
+        </div>
+    </section>
+
+    <!-- Admin Activity Hub -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+        
+        <!-- Pending Instructor Requests -->
+        <section class="bg-secondary-dark rounded-[3rem] p-10 border border-gray-700/50 shadow-2xl">
+            <div class="flex justify-between items-center mb-8 text-white">
+                <h3 class="text-xl font-black uppercase tracking-tight">Pending Course Submissions</h3>
+                <a href="{{ route('dashboard.admin.content') }}" class="text-xs font-black text-red-400 hover:underline">Manage All</a>
+            </div>
+            <div class="space-y-4">
+                @foreach($recent_courses as $course)
+                    @if($course->approval === 'pending')
+                        <div class="flex items-center gap-4 p-5 bg-primary-dark/50 rounded-[2rem] border border-gray-800 hover:border-red-500/30 transition group">
+                            <div class="w-14 h-14 bg-gray-800 rounded-2xl flex items-center justify-center">
+                                <i data-lucide="file-text" class="text-gray-500 group-hover:text-red-400 transition"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="text-sm font-bold text-white">{{ $course->title }}</h4>
+                                <p class="text-[10px] text-gray-500 font-black uppercase mt-1">Instructor: {{ $course->tutor->name }}</p>
+                            </div>
+                            <div class="flex gap-2">
+                                <form action="{{ route('dashboard.admin.courses.approve', $course) }}" method="POST">
+                                    @csrf
+                                    <button class="p-3 bg-green-500/10 text-green-500 rounded-xl hover:bg-green-500 hover:text-white transition">
+                                        <i data-lucide="check" class="w-4 h-4"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    @endif
+                @endforeach
+                
+                @if($recent_courses->where('approval', 'pending')->count() == 0)
+                    <div class="text-center py-10 opacity-30">
+                        <i data-lucide="check-circle" class="w-12 h-12 mx-auto mb-4"></i>
+                        <p class="text-sm font-bold uppercase tracking-widest">Everything Approved</p>
+                    </div>
+                @endif
+            </div>
+        </section>
+
+        <!-- Platform User Insights -->
+        <section class="bg-secondary-dark rounded-[3rem] p-10 border border-gray-700/50 shadow-2xl">
+            <h3 class="text-xl font-black text-white uppercase tracking-tight mb-8">Recently Joined Users</h3>
+            <div class="space-y-6">
+                @foreach($recent_users as $user)
+                    <div class="flex items-center gap-4 group">
+                        <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&background=6366f1&color=fff" 
+                             class="w-12 h-12 rounded-[1.25rem] border-2 border-gray-800 group-hover:border-accent-blue transition">
+                        <div class="flex-1">
+                            <p class="text-sm font-bold text-white">{{ $user->name }}</p>
+                            <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded {{ $user->role === 'student' ? 'bg-blue-500/10 text-blue-400' : 'bg-accent-gold/10 text-accent-gold' }}">
+                                {{ $user->role }}
+                            </span>
+                        </div>
+                        <p class="text-[10px] text-gray-600 font-black uppercase">{{ $user->created_at->diffForHumans() }}</p>
+                    </div>
+                @endforeach
+            </div>
+        </section>
+
+    </div>
+
+</main>
+
+@push('scripts')
+<script>
+    lucide.createIcons();
+</script>
+@endpush
 @endsection

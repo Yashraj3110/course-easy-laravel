@@ -24,7 +24,7 @@
             <div class="flex items-center justify-between text-sm">
 
                 <div class="flex items-center gap-3 step text-white" data-step-indicator="1">
-                    <div class="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center">1</div>
+                    <div class="w-8 h-8 rounded-full bg-instructor-purple flex items-center justify-center">1</div>
                     Course
                 </div>
 
@@ -87,10 +87,9 @@
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
-
                         <select name="category"
                             class="w-full px-4 py-2.5 rounded-xl bg-gray-800 text-white border border-gray-700
-               focus:outline-none focus:ring-2 focus:ring-indigo-500">
+               focus:ring-2 focus:ring-instructor-purple outline-none">
 
                             <option value="">Select Category</option>
 
@@ -137,6 +136,12 @@
 
                         </select>
 
+                        <select name="status"
+                            class="w-full px-4 py-2.5 rounded-xl bg-gray-800 text-white border border-gray-700
+               focus:ring-2 focus:ring-instructor-purple outline-none">
+                            <option value="draft" {{ (isset($course) && $course->status === 'draft') ? 'selected' : '' }}>Draft</option>
+                            <option value="published" {{ (isset($course) && $course->status === 'published') ? 'selected' : '' }}>Published</option>
+                        </select>
                     </div>
 
 
@@ -144,7 +149,7 @@
                         class="block w-full text-sm text-gray-400
                               file:mr-4 file:py-2.5 file:px-4
                               file:rounded-xl file:border-0
-                              file:bg-indigo-600/20 file:text-indigo-400">
+                              file:bg-instructor-purple/20 file:text-instructor-purple">
                 </div>
             </div>
 
@@ -158,12 +163,41 @@
                         </h3>
 
                         <button type="button" onclick="addModule()"
-                            class="px-4 py-2 bg-indigo-600/20 text-indigo-400 rounded-xl hover:bg-indigo-600/30">
+                            class="px-4 py-2 bg-instructor-purple/20 text-instructor-purple rounded-xl hover:bg-instructor-purple/30">
                             + Add Module
                         </button>
                     </div>
 
-                    <div id="modulesContainer" class="space-y-5"></div>
+                    <div id="modulesContainer" class="space-y-5">
+                        @if($mode === 'edit' && $course->modules)
+                            @foreach($course->modules as $mIndex => $module)
+                                <div class="module-item bg-gray-800/60 border border-gray-700 rounded-xl p-5 space-y-4" data-module-index="{{ $mIndex }}">
+                                    <div class="flex justify-between items-center">
+                                        <h4 class="text-white font-semibold">📦 Module</h4>
+                                        <button type="button" onclick="this.closest('.module-item').remove()" class="text-red-400 text-sm">Remove</button>
+                                    </div>
+                                    <input name="modules[{{ $mIndex }}][title]" value="{{ $module->title }}" placeholder="Module title" class="w-full px-4 py-2.5 rounded-xl bg-gray-800 text-white border border-gray-700">
+                                    <textarea name="modules[{{ $mIndex }}][description]" placeholder="Module description" class="w-full px-4 py-2.5 rounded-xl bg-gray-800 text-white border border-gray-700">{{ $module->description }}</textarea>
+                                    <div class="pl-4 border-l border-gray-600 space-y-3 lectures-container">
+                                        @foreach($module->lectures as $lIndex => $lecture)
+                                            <div class="lecture-item bg-gray-900/70 border border-gray-700 rounded-lg p-4 space-y-2">
+                                                <div class="flex justify-between">
+                                                    <h5 class="text-white text-sm font-semibold">🎬 Lecture</h5>
+                                                    <button type="button" onclick="this.closest('.lecture-item').remove()" class="text-red-400 text-xs">Remove</button>
+                                                </div>
+                                                <input name="modules[{{ $mIndex }}][lectures][{{ $lIndex }}][title]" value="{{ $lecture->title }}" placeholder="Lecture title" class="w-full px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-700">
+                                                <input name="modules[{{ $mIndex }}][lectures][{{ $lIndex }}][video_url]" value="{{ $lecture->video_url }}" placeholder="YouTube URL" class="w-full px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-700">
+                                                <label class="flex items-center gap-2 text-gray-400 text-xs">
+                                                    <input type="checkbox" name="modules[{{ $mIndex }}][lectures][{{ $lIndex }}][is_preview]" {{ $lecture->is_preview ? 'checked' : '' }}> Preview
+                                                </label>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                    <button type="button" onclick="addLecture(this)" class="px-3 py-2 text-sm bg-instructor-purple/20 text-instructor-purple rounded-lg">+ Add Lecture</button>
+                                </div>
+                            @endforeach
+                        @endif
+                    </div>
 
                     <p class="text-xs text-gray-400">
                         Add lectures inside each module.
@@ -201,7 +235,7 @@
 
                 <div class="flex gap-3">
                     <button type="button" onclick="nextStep()" id="nextBtn"
-                        class="px-6 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700">
+                        class="px-6 py-2 bg-instructor-purple text-white rounded-xl hover:bg-instructor-purple/90">
                         Next
                     </button>
 
@@ -234,7 +268,7 @@
                 const circle = el.querySelector('div');
                 el.classList.toggle('text-white', i + 1 <= currentStep);
                 el.classList.toggle('text-gray-400', i + 1 > currentStep);
-                circle.classList.toggle('bg-indigo-600', i + 1 <= currentStep);
+                circle.classList.toggle('bg-instructor-purple', i + 1 <= currentStep);
                 circle.classList.toggle('bg-gray-700', i + 1 > currentStep);
             });
 
@@ -251,53 +285,91 @@
         }
 
         /* MODULES + LECTURES */
+        let moduleCounter = {{ $course ? $course->modules->count() : 0 }};
+
         function addModule() {
+            const mIdx = moduleCounter++;
             document.getElementById('modulesContainer').insertAdjacentHTML('beforeend', `
-        <div class="module-item bg-gray-800/60 border border-gray-700 rounded-xl p-5 space-y-4">
-            <div class="flex justify-between items-center">
-                <h4 class="text-white font-semibold">📦 Module</h4>
-                <button type="button" onclick="this.closest('.module-item').remove()"
-                    class="text-red-400 text-sm">Remove</button>
-            </div>
+                <div class="module-item bg-gray-800/60 border border-gray-700 rounded-xl p-5 space-y-4" data-module-index="${mIdx}">
+                    <div class="flex justify-between items-center">
+                        <h4 class="text-white font-semibold">📦 Module</h4>
+                        <button type="button" onclick="this.closest('.module-item').remove()"
+                            class="text-red-400 text-sm">Remove</button>
+                    </div>
 
-            <input name="modules[][title]" placeholder="Module title"
-                class="w-full px-4 py-2.5 rounded-xl bg-gray-800 text-white border border-gray-700">
+                    <input name="modules[${mIdx}][title]" placeholder="Module title"
+                        class="w-full px-4 py-2.5 rounded-xl bg-gray-800 text-white border border-gray-700">
 
-            <textarea name="modules[][description]" placeholder="Module description"
-                class="w-full px-4 py-2.5 rounded-xl bg-gray-800 text-white border border-gray-700"></textarea>
+                    <textarea name="modules[${mIdx}][description]" placeholder="Module description"
+                        class="w-full px-4 py-2.5 rounded-xl bg-gray-800 text-white border border-gray-700"></textarea>
 
-            <div class="pl-4 border-l border-gray-600 space-y-3 lectures-container"></div>
+                    <div class="pl-4 border-l border-gray-600 space-y-3 lectures-container"></div>
 
-            <button type="button" onclick="addLecture(this)"
-                class="px-3 py-2 text-sm bg-indigo-600/20 text-indigo-400 rounded-lg">
-                + Add Lecture
-            </button>
-        </div>
-    `);
+                    <button type="button" onclick="addLecture(this)"
+                        class="px-3 py-2 text-sm bg-instructor-purple/20 text-instructor-purple rounded-lg">
+                        + Add Lecture
+                    </button>
+                </div>
+            `);
         }
 
         function addLecture(btn) {
-            btn.closest('.module-item').querySelector('.lectures-container')
-                .insertAdjacentHTML('beforeend', `
-        <div class="lecture-item bg-gray-900/70 border border-gray-700 rounded-lg p-4 space-y-2">
-            <div class="flex justify-between">
-                <h5 class="text-white text-sm font-semibold">🎬 Lecture</h5>
-                <button type="button" onclick="this.closest('.lecture-item').remove()"
-                    class="text-red-400 text-xs">Remove</button>
-            </div>
+            const moduleItem = btn.closest('.module-item');
+            const mIdx = moduleItem.getAttribute('data-module-index');
+            const container = moduleItem.querySelector('.lectures-container');
+            const lIdx = container.children.length;
 
-            <input name="modules[][lectures][][title]" placeholder="Lecture title"
-                class="w-full px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-700">
+            container.insertAdjacentHTML('beforeend', `
+                <div class="lecture-item bg-gray-900/70 border border-gray-700 rounded-lg p-4 space-y-2">
+                    <div class="flex justify-between">
+                        <h5 class="text-white text-sm font-semibold">🎬 Lecture</h5>
+                        <button type="button" onclick="this.closest('.lecture-item').remove()"
+                            class="text-red-400 text-xs">Remove</button>
+                    </div>
 
-            <input name="modules[][lectures][][video_url]" placeholder="YouTube URL"
-                class="w-full px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-700">
+                    <input name="modules[${mIdx}][lectures][${lIdx}][title]" placeholder="Lecture title"
+                        class="w-full px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-700">
 
-            <label class="flex items-center gap-2 text-gray-400 text-xs">
-                <input type="checkbox" name="modules[][lectures][][is_preview]"> Preview
-            </label>
-        </div>
-    `);
+                    <input name="modules[${mIdx}][lectures][${lIdx}][video_url]" placeholder="YouTube URL"
+                        class="w-full px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-700">
+
+                    <label class="flex items-center gap-2 text-gray-400 text-xs">
+                        <input type="checkbox" name="modules[${mIdx}][lectures][${lIdx}][is_preview]"> Preview
+                    </label>
+                </div>
+            `);
         }
+
+        /* FORM SUBMISSION */
+        document.getElementById('courseWizardForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const mode = document.getElementById('form_mode').value;
+            const courseId = document.getElementById('course_id').value;
+            const formData = new FormData(this);
+
+            const url = mode === 'create' ? '/instructor/courses' : `/instructor/courses/${courseId}`;
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
+                },
+                body: formData
+            })
+            .then(res => res.json())
+            .then(res => {
+                if(res.status) {
+                    window.location.href = "{{ route('dashboard.instructor.courses') }}";
+                } else {
+                    alert(res.message || 'Error occurred');
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                alert('Connection error');
+            });
+        });
 
         document.addEventListener('DOMContentLoaded', showStep);
     </script>

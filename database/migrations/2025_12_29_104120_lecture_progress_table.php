@@ -14,20 +14,24 @@ return new class extends Migration
         Schema::create('lecture_progress', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('lecture_id')
-                ->constrained('lectures')
-                ->cascadeOnDelete();
-
             $table->foreignId('user_id')
                 ->constrained('users')
                 ->cascadeOnDelete();
 
-            $table->integer('watched_duration')->default(0);
-            $table->boolean('is_completed')->default(false);
+            $table->foreignId('course_id')
+                ->constrained('courses')
+                ->cascadeOnDelete();
+
+            $table->foreignId('lecture_id')
+                ->constrained('lectures')
+                ->cascadeOnDelete();
+
+            $table->boolean('completed')->default(false);
+            $table->timestamp('watched_at')->nullable();
 
             $table->timestamps();
 
-            $table->unique(['lecture_id', 'user_id']);
+            $table->unique(['user_id', 'course_id', 'lecture_id']);
         });
     }
 

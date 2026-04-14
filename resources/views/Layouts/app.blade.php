@@ -4,10 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Course Easy | Modern Online Learning</title>
+    <title>Course Easy | Modern Laboratory of Learning</title>
     <link rel="icon" type="image/png" href="{{ asset('assets/image/image.png') }}">
-
-
 
     <!-- 🩶 Apply theme BEFORE Tailwind loads -->
     <script>
@@ -21,9 +19,8 @@
         })();
     </script>
 
-    <!-- ✅ Tailwind should load AFTER theme script -->
+    <!-- ✅ Tailwind & Config -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- If Alpine.js is not already loaded -->
     <script src="//unpkg.com/alpinejs" defer></script>
     <script>
         tailwind.config = {
@@ -31,69 +28,67 @@
             theme: {
                 extend: {
                     colors: {
-                        'primary-dark': '#0f172a',
-                        'secondary-dark': '#1e293b',
+                        'primary-dark': '#050505',
+                        'secondary-dark': '#0d0d0d',
                         'accent-gold': '#facc15',
-                        'accent-blue': '#6366f1',
+                        'accent-indigo': '#4f46e5',
                         'active-blue': '#374151',
                     },
                     boxShadow: {
-                        'lg-dark': '0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.1)',
+                        'premium': '0 20px 50px rgba(0, 0, 0, 0.4)',
                     },
                 },
             },
         };
     </script>
-    <!-- Notyf CSS -->
+    
+    <!-- Dependencies -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
-
-    <!-- Notyf JS -->
     <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
-
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+        @font-face {
+            font-family: 'CabinetGrotesk';
+            src: url('https://api.fontshare.com/v2/fonts/cabinet-grotesk?display=swap');
+        }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'CabinetGrotesk', 'Inter', sans-serif;
             min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
         }
 
-        body::-webkit-scrollbar {
-            width: 8px;
+        html {
+            overflow-x: hidden;
+            scrollbar-width: none; /* Firefox */
         }
 
-        body::-webkit-scrollbar-thumb {
-            background-color: #4f46e5;
-            border-radius: 4px;
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        ::-webkit-scrollbar {
+            display: none;
         }
 
-        body::-webkit-scrollbar-track {
-            background: #1f2937;
-        }
+        [x-cloak] { display: none !important; }
     </style>
 </head>
 
-<body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
+<body class="bg-white dark:bg-[#050505] text-gray-900 dark:text-gray-100 transition-colors duration-300 antialiased">
 
-    <!-- 🌞 Light Mode Button -->
-    <button id="light-btn"
-        class="fixed bottom-6 right-6 z-[9999] p-3 rounded-full shadow-lg backdrop-blur-md
-           bg-white/70 border border-gray-300 transition-all duration-300
-           hover:scale-110 hover:shadow-xl hover:bg-white dark:hidden">
-        <i data-lucide="moon" class="w-6 h-6 text-gray-900"></i>
-    </button>
-
-    <!-- 🌙 Dark Mode Button -->
-    <button id="dark-btn"
-        class="fixed bottom-6 right-6 z-[9999] p-3 rounded-full shadow-lg backdrop-blur-md
-           bg-gray-800/70 border border-gray-700 transition-all duration-300
-           hover:scale-110 hover:shadow-xl hover:bg-gray-700 hidden dark:flex">
-        <i data-lucide="sun" class="w-6 h-6 text-yellow-400"></i>
-    </button>
+    <!-- 🌞 Mode Controls (Tactical Floating) -->
+    <div class="fixed bottom-10 right-10 z-[9999] flex flex-col gap-3">
+        <button id="theme-toggle"
+            class="p-4 rounded-[1.2rem] shadow-premium backdrop-blur-3xl
+               bg-white/10 dark:bg-black/10 border border-black/5 dark:border-white/5 transition-all duration-500
+               hover:scale-110 group active:scale-95">
+            <i data-lucide="sun" class="w-5 h-5 text-yellow-500 hidden dark:block"></i>
+            <i data-lucide="moon" class="w-5 h-5 text-indigo-600 dark:hidden"></i>
+        </button>
+    </div>
 
     @include('pages.navbar')
 
@@ -101,44 +96,24 @@
         @yield('content')
     </main>
 
-    @include('pages.footer')
+    @if(!Route::is('student.course.learn'))
+        @include('pages.footer')
+    @endif
 
     @stack('scripts')
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
+            AOS.init({ duration: 800, once: true });
 
-            const htmlEl = document.getElementById('html');
-            const lightBtn = document.getElementById('light-btn');
-            const darkBtn = document.getElementById('dark-btn');
+            const htmlEl = document.documentElement;
+            const themeToggle = document.getElementById('theme-toggle');
 
-            // 🌗 Load saved theme
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'dark') {
-                htmlEl.classList.add('dark');
-                lightBtn.classList.add('hidden');
-                darkBtn.classList.remove('hidden');
-            } else {
-                htmlEl.classList.remove('dark');
-                darkBtn.classList.add('hidden');
-                lightBtn.classList.remove('hidden');
-            }
-
-            // 🌙 Light Mode → Dark Mode
-            lightBtn.addEventListener('click', () => {
-                htmlEl.classList.add('dark');
-                localStorage.setItem('theme', 'dark');
-                lightBtn.classList.add('hidden');
-                darkBtn.classList.remove('hidden');
-            });
-
-            // 🌞 Dark Mode → Light Mode
-            darkBtn.addEventListener('click', () => {
-                htmlEl.classList.remove('dark');
-                localStorage.setItem('theme', 'light');
-                darkBtn.classList.add('hidden');
-                lightBtn.classList.remove('hidden');
+            themeToggle.addEventListener('click', () => {
+                const isDark = htmlEl.classList.toggle('dark');
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+                lucide.createIcons();
             });
         });
     </script>

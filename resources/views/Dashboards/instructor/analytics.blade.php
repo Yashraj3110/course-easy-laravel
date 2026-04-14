@@ -1,48 +1,90 @@
 @extends('Dashboards.instructor.dashboard')
 
 @section('Idash')
-    <main class="flex-1 p-10 overflow-y-auto">
+<main class="flex-1 p-10 overflow-y-auto bg-primary-dark">
 
-<div class="space-y-6">
-  <div class="flex items-center justify-between">
-    <h1 class="text-2xl font-bold text-gray-100">Analytics & Insights</h1>
-    <div class="text-sm text-gray-300">Date range:
-      <select class="ml-2 bg-gray-900 text-gray-100 p-2 rounded border border-gray-700">
-        <option>Last 7 days</option>
-        <option>Last 30 days</option>
-        <option>Last 90 days</option>
-      </select>
+    <header class="flex justify-between items-center mb-12">
+        <div>
+            <h2 class="text-4xl font-light text-white">Performance <span class="font-bold text-instructor-purple italic">Insights</span></h2>
+            <p class="text-gray-400 mt-2">Historical data and platform performance metrics.</p>
+        </div>
+        <div class="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-gray-500 bg-secondary-dark px-4 py-2 rounded-xl border border-gray-700">
+            <span class="w-2 h-2 rounded-full bg-green-500"></span> Live Data Feed
+        </div>
+    </header>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+        <!-- Revenue Card -->
+        <div class="p-8 bg-secondary-dark rounded-[2.5rem] border border-gray-700/50 shadow-2xl relative overflow-hidden group hover:border-instructor-purple/30 transition">
+            <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition">
+                <i data-lucide="wallet" class="w-16 h-16 text-white"></i>
+            </div>
+            <p class="text-gray-500 text-[10px] font-black uppercase tracking-widest mb-2">Platform Revenue</p>
+            <h3 class="text-4xl font-black text-white mb-2">${{ number_format($stats['total_revenue'], 2) }}</h3>
+            <p class="text-[10px] text-green-500 font-black uppercase tracking-widest flex items-center gap-1">
+                <i data-lucide="trending-up" class="w-3 h-3"></i> Total Lifetime
+            </p>
+        </div>
+
+        <!-- Students Card -->
+        <div class="p-8 bg-secondary-dark rounded-[2.5rem] border border-gray-700/50 shadow-2xl relative overflow-hidden group hover:border-instructor-purple/30 transition">
+            <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition">
+                <i data-lucide="users" class="w-16 h-16 text-white"></i>
+            </div>
+            <p class="text-gray-500 text-[10px] font-black uppercase tracking-widest mb-2">Total Students</p>
+            <h3 class="text-4xl font-black text-white mb-2">{{ number_format($stats['total_students']) }}</h3>
+            <p class="text-[10px] text-instructor-purple font-black uppercase tracking-widest flex items-center gap-1">
+                <i data-lucide="users" class="w-3 h-3"></i> Unique Learners
+            </p>
+        </div>
+
+        <!-- Rating Card -->
+        <div class="p-8 bg-secondary-dark rounded-[2.5rem] border border-gray-700/50 shadow-2xl relative overflow-hidden group hover:border-instructor-purple/30 transition">
+            <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition">
+                <i data-lucide="star" class="w-16 h-16 text-white"></i>
+            </div>
+            <p class="text-gray-500 text-[10px] font-black uppercase tracking-widest mb-2">Average Rating</p>
+            <h3 class="text-4xl font-black text-white mb-2">{{ number_format($stats['avg_rating'], 1) }}</h3>
+            <p class="text-[10px] text-accent-gold font-black uppercase tracking-widest flex items-center gap-1">
+                <i data-lucide="award" class="w-3 h-3"></i> Top Tier Educator
+            </p>
+        </div>
     </div>
-  </div>
 
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-    <div class="bg-gray-800 rounded-xl p-6">
-      <h4 class="text-sm text-gray-300">Total Revenue</h4>
-      <div class="mt-3 text-2xl font-bold text-green-400">$2,480</div>
-      <div class="text-xs text-gray-400 mt-1">+12% from last period</div>
-    </div>
+    <!-- Growth Visualization Placeholder -->
+    <section class="bg-secondary-dark rounded-[3rem] p-12 border border-gray-700/50 shadow-2xl relative overflow-hidden">
+        <div class="flex justify-between items-center mb-10">
+            <h3 class="text-xl font-black text-white uppercase tracking-tight">Student Growth Trends</h3>
+        </div>
+        
+        <div class="h-64 flex items-end gap-2 px-10 relative">
+            <!-- Mock Bar Chart using CSS -->
+            <div class="flex-1 bg-gray-800/50 rounded-t-xl hover:bg-instructor-purple/40 transition-all duration-500" style="height: 40%"></div>
+            <div class="flex-1 bg-gray-800/50 rounded-t-xl hover:bg-instructor-purple/40 transition-all duration-500" style="height: 60%"></div>
+            <div class="flex-1 bg-gray-800/50 rounded-t-xl hover:bg-instructor-purple/40 transition-all duration-500" style="height: 35%"></div>
+            <div class="flex-1 bg-instructor-purple/80 rounded-t-xl hover:bg-instructor-purple transition-all duration-500" style="height: 85%"></div>
+            <div class="flex-1 bg-gray-800/50 rounded-t-xl hover:bg-instructor-purple/40 transition-all duration-500" style="height: 55%"></div>
+            <div class="flex-1 bg-gray-800/50 rounded-t-xl hover:bg-instructor-purple/40 transition-all duration-500" style="height: 70%"></div>
+            <div class="flex-1 bg-gray-800/50 rounded-t-xl hover:bg-instructor-purple/40 transition-all duration-500 shadow-[0_0_20px_rgba(139,92,246,0.3)]" style="height: 95%"></div>
+            
+            <!-- Axis Labels -->
+            <div class="absolute inset-0 flex flex-col justify-between text-[10px] font-black text-gray-700 uppercase -ml-16 py-4">
+                <span>100%</span>
+                <span>50%</span>
+                <span>0%</span>
+            </div>
+        </div>
+        
+        <div class="flex justify-between px-10 mt-6 text-[10px] font-black text-gray-600 uppercase tracking-widest">
+            <span>Monday</span>
+            <span>Tuesday</span>
+            <span>Wednesday</span>
+            <span>Thursday</span>
+            <span>Friday</span>
+            <span>Saturday</span>
+            <span>Sunday</span>
+        </div>
+    </section>
 
-    <div class="bg-gray-800 rounded-xl p-6">
-      <h4 class="text-sm text-gray-300">New Students</h4>
-      <div class="mt-3 text-2xl font-bold text-indigo-400">324</div>
-      <div class="text-xs text-gray-400 mt-1">+8% from last period</div>
-    </div>
-
-    <div class="bg-gray-800 rounded-xl p-6">
-      <h4 class="text-sm text-gray-300">Avg. Completion</h4>
-      <div class="mt-3 text-2xl font-bold text-yellow-400">42%</div>
-      <div class="text-xs text-gray-400 mt-1">Based on enrolled students</div>
-    </div>
-  </div>
-
-  <!-- Simple static chart placeholders -->
-  <div class="bg-gray-800 rounded-xl p-6">
-    <h3 class="text-lg text-gray-100 font-semibold">Student Growth</h3>
-    <div class="mt-4 h-48 bg-gray-900 rounded flex items-center justify-center text-gray-500">
-      Chart placeholder — add chart library for dynamic visuals
-    </div>
-  </div>
-</div>
-
-    </main>
+</main>
 @endsection

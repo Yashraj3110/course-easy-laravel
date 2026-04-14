@@ -9,82 +9,79 @@ class Course extends Model
 {
     use HasFactory;
 
-    /**
-     * Mass assignable fields
-     */
     protected $fillable = [
-        'tutor_id',
-        'title',
-        'description',
-        'price',
-        'category',
-        'status',
-        'thumbnail',
-        'rating',
-        'difficulty',
-        'approval',
+        'tutor_id', 'title', 'description', 'price',
+        'category', 'status', 'thumbnail', 'rating',
+        'difficulty', 'approval',
     ];
 
-    /**
-     * Instructor (Tutor) who created the course
-     */
+    // ── Relationships ──────────────────────────────────────────────────
+
     public function tutor()
     {
         return $this->belongsTo(User::class, 'tutor_id');
     }
 
-    /**
-     * Modules of the course
-     */
     public function modules()
     {
         return $this->hasMany(Module::class)->orderBy('order');
     }
 
-    /**
-     * Lectures through modules (optional helper)
-     */
     public function lectures()
     {
-        return $this->hasManyThrough(
-            Lecture::class,
-            Module::class,
-            'course_id',   // Foreign key on modules table
-            'module_id',   // Foreign key on lectures table
-            'id',          // Local key on courses table
-            'id'           // Local key on modules table
-        )->orderBy('order');
+        return $this->hasMany(Lecture::class);
     }
 
-    /**
-     * Scope: published courses
-     */
-    public function scopePublished($query)
+    public function enrollments()
     {
-        return $query->where('status', 'published');
+        return $this->hasMany(Enrollment::class);
     }
 
-    /**
-     * Scope: draft courses
-     */
-    public function scopeDraft($query)
+    public function students()
     {
-        return $query->where('status', 'draft');
+        return $this->belongsToMany(User::class, 'enrollments')
+                    ->withPivot('status', 'progress_percent', 'enrolled_at')
+                    ->withTimestamps();
     }
 
-    /**
-     * Scope: pending approval
-     */
-    public function scopePendingApproval($query)
+    public function quizzes()
     {
-        return $query->where('approval', 'pending');
+        return $this->hasMany(Quiz::class);
     }
 
-    /**
-     * Scope: approved courses
-     */
-    public function scopeApproved($query)
+    public function certificates()
     {
-        return $query->where('approval', 'approved');
+        return $this->hasMany(Certificate::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(CourseComment::class)->latest();
+    }
+
+    // ── Helpers ────────────────────────────────────────────────────────
+
+    public function isEnrolledBy(int $userId): bool
+    {
+        return $this->enrollments()->where('user_id', $userId)->exists();
+    }
+
+    public function totalLectures(): int
+    {
+        return $this->lectures()->count();
+    }
+
+    public function totalDuration(): int
+    {
+        return (int) $this->lectures()->sum('duration');
+    }
+
+    public function getApprovalBadgeAttribute(): string
+    {
+        return match ($this->approval) {
+            'approved' => 'success',
+            'rejected' => 'danger',
+            default    => 'warning',
+        };
     }
 }

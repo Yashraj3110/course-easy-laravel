@@ -1,230 +1,241 @@
 @extends('Dashboards.instructor.dashboard')
 
 @section('Idash')
-<main class="flex-1 p-10 overflow-y-auto">
+<main class="flex-1 p-10 overflow-y-auto bg-primary-dark">
     <div class="space-y-6">
 
         <!-- Header -->
-        <div class="flex items-center justify-between">
+        <header class="flex justify-between items-center mb-12">
             <div>
-                <h1 class="text-3xl font-bold text-accent-gold">My Quizzes</h1>
-                <p class="text-sm text-gray-400 mt-1">
-                    Create and manage quizzes linked to lectures
-                </p>
+                <h2 class="text-4xl font-light text-white">Quiz <span class="font-bold text-instructor-purple italic">Assignments</span></h2>
+                <p class="text-gray-400 mt-2">Create and manage self-assessment quizzes for your students.</p>
             </div>
-
-            <button onclick="openCreateQuizModal()"
-                class="px-5 py-3 bg-accent-gold text-primary-dark font-bold rounded-xl hover:bg-yellow-500">
-                New Quiz
-            </button>
-        </div>
+            <div class="flex items-center space-x-4">
+                <button onclick="openCreateQuizModal()" class="py-4 px-8 bg-instructor-purple text-white font-black rounded-2xl hover:bg-opacity-90 shadow-xl shadow-instructor-purple/20 transition transform active:scale-95 flex items-center gap-2 uppercase tracking-widest text-xs">
+                    <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                    New Quiz
+                </button>
+            </div>
+        </header>
 
         <!-- Quiz Grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             @forelse ($quizzes as $quiz)
-                <div class="bg-secondary-dark/40 rounded-2xl border border-gray-700/50 shadow-xl
-                            hover:shadow-2xl hover:scale-[1.01] transition">
-
-                    <div class="p-5 space-y-3">
-
-                        <h3 class="text-xl font-semibold text-accent-gold truncate">
-                            {{ $quiz->title }}
-                        </h3>
-
-                        <p class="text-sm text-gray-400">
-                            Course:
-                            <span class="text-gray-300">{{ $quiz->course->title ?? '-' }}</span><br>
-                            Lecture:
-                            <span class="text-gray-300">{{ $quiz->lecture->title ?? '-' }}</span>
-                        </p>
-
-                        <div class="flex items-center justify-between text-sm">
-                            <span class="px-2 py-0.5 rounded-full text-xs
-                                {{ $quiz->is_active ? 'bg-green-500/20 text-green-400' : 'bg-gray-500/20 text-gray-400' }}">
+                <div class="bg-secondary-dark rounded-[2.5rem] border border-gray-700/50 shadow-2xl overflow-hidden group hover:border-instructor-purple/30 transition-all duration-500">
+                    <div class="p-8 space-y-5">
+                        <div class="flex justify-between items-start">
+                             <div class="p-4 bg-instructor-purple/10 rounded-2xl border border-instructor-purple/20">
+                                <i data-lucide="help-circle" class="text-instructor-purple w-6 h-6"></i>
+                            </div>
+                            <span class="px-3 py-1 bg-primary-dark/50 rounded-full text-[10px] font-black uppercase tracking-widest {{ $quiz->is_active ? 'text-green-500' : 'text-gray-500' }} border border-white/5">
                                 {{ $quiz->is_active ? 'Active' : 'Inactive' }}
-                            </span>
-
-                            <span class="text-xs text-gray-400">
-                                {{ $quiz->questions_count ?? $quiz->questions()->count() }} Questions
                             </span>
                         </div>
 
-                        <div class="pt-4 flex justify-between">
-                            <button onclick="openEditQuizModal({{ $quiz->id }})"
-                                class="px-3 py-2 text-sm bg-accent-blue/20 border border-accent-blue/50
-                                       rounded-lg text-accent-blue hover:bg-accent-blue/30">
-                                Edit
-                            </button>
+                        <h3 class="text-xl font-bold text-white group-hover:text-instructor-purple transition-colors line-clamp-1">
+                            {{ $quiz->title }}
+                        </h3>
+
+                        <div class="space-y-2">
+                             <p class="text-[10px] font-black text-gray-600 uppercase tracking-widest">Linked Content</p>
+                             <div class="flex items-center gap-2">
+                                <span class="bg-gray-800 text-gray-300 text-[10px] font-bold px-2 py-0.5 rounded border border-gray-700 truncate max-w-[150px]">{{ $quiz->course->title ?? '-' }}</span>
+                                <i data-lucide="chevron-right" class="w-3 h-3 text-gray-700"></i>
+                                <span class="bg-gray-800 text-gray-300 text-[10px] font-bold px-2 py-0.5 rounded border border-gray-700 truncate max-w-[150px]">{{ $quiz->lecture->title ?? '-' }}</span>
+                             </div>
+                        </div>
+
+                        <div class="flex items-center justify-between pt-4 border-t border-gray-800">
+                             <span class="text-xs font-bold text-gray-500 flex items-center gap-1">
+                                <i data-lucide="layers" class="w-3 h-3"></i>
+                                {{ $quiz->questions_count ?? $quiz->questions()->count() }} Questions
+                             </span>
+                             <button onclick="openEditQuizModal({{ $quiz->id }})" class="p-3 bg-instructor-purple/10 text-instructor-purple rounded-xl hover:bg-instructor-purple hover:text-white transition">
+                                <i data-lucide="edit-3" class="w-4 h-4"></i>
+                             </button>
                         </div>
                     </div>
                 </div>
             @empty
-                <div class="col-span-full text-center text-gray-400 py-16">
-                    No quizzes created yet.
+                <div class="col-span-full py-32 text-center opacity-30">
+                    <i data-lucide="help-circle" class="w-20 h-20 mx-auto mb-6"></i>
+                    <h2 class="text-2xl font-black uppercase tracking-[0.3em] mb-2 text-white">No Quizzes Created</h2>
+                    <p class="text-gray-400">Assess student learning with interactive quizzes.</p>
                 </div>
             @endforelse
-
         </div>
     </div>
 </main>
 
 <!-- ================= QUIZ MODAL ================= -->
-<div id="quizModal"
-     class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/70 backdrop-blur-sm">
-
-    <div class="w-full max-w-3xl bg-gray-900 rounded-2xl border border-gray-700 shadow-xl
-                overflow-y-auto max-h-[90vh]">
-
+<div id="quizModal" class="fixed inset-0 z-[60] hidden flex items-center justify-center bg-primary-dark/90 backdrop-blur-xl p-6">
+    <div class="w-full max-w-4xl bg-secondary-dark rounded-[3rem] border border-gray-700 shadow-2xl flex flex-col max-h-[90vh]">
         <!-- Header -->
-        <div class="flex justify-between items-center px-6 py-4 border-b border-gray-700">
-            <h2 id="quizModalTitle" class="text-lg font-semibold text-white">Create Quiz</h2>
-            <button onclick="closeQuizModal()" class="text-gray-400 hover:text-red-400 text-xl">✕</button>
+        <div class="flex justify-between items-center p-8 border-b border-gray-800">
+            <div>
+                <h2 id="quizModalTitle" class="text-2xl font-black text-white uppercase tracking-tight">Create Quiz</h2>
+                <p class="text-xs text-gray-500 mt-1">Configure your questions and correct answers.</p>
+            </div>
+            <button onclick="closeQuizModal()" class="p-3 bg-red-500/10 text-red-500 rounded-2xl hover:bg-red-500 hover:text-white transition">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
         </div>
 
         <!-- Form -->
-        <form id="quizForm" class="p-6 space-y-6">
+        <form id="quizForm" class="flex-1 overflow-y-auto custom-scrollbar p-8 space-y-10">
             @csrf
             <input type="hidden" name="quiz_id" id="quiz_id">
 
-            <!-- Quiz Info -->
-            <div class="space-y-3">
-                <input name="title" id="quiz_title"
-                       placeholder="Quiz Title"
-                       class="w-full px-4 py-2 rounded-xl bg-gray-800 text-white border border-gray-700">
-
-                <textarea name="description" id="quiz_description" rows="2"
-                          placeholder="Quiz Description"
-                          class="w-full px-4 py-2 rounded-xl bg-gray-800 text-white border border-gray-700"></textarea>
-
-                <select name="lecture_id" id="lecture_id"
-                        class="w-full px-4 py-2 rounded-xl bg-gray-800 text-white border border-gray-700">
-                    <option value="">Select Lecture</option>
-                    @foreach ($courses as $course)
-                        @foreach ($course->modules as $module)
-                            <optgroup label="{{ $course->title }} → {{ $module->title }}">
-                                @foreach ($module->lectures as $lecture)
-                                    <option value="{{ $lecture->id }}">{{ $lecture->title }}</option>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="space-y-6">
+                    <div>
+                        <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 block">General Information</label>
+                        <input name="title" id="quiz_title" placeholder="Enter Quiz Title" 
+                               class="w-full px-6 py-4 bg-primary-dark border border-gray-700 rounded-2xl text-white focus:ring-2 focus:ring-instructor-purple outline-none">
+                    </div>
+                    <textarea name="description" id="quiz_description" rows="3" placeholder="Enter Quiz Description..." 
+                              class="w-full px-6 py-4 bg-primary-dark border border-gray-700 rounded-2xl text-white focus:ring-2 focus:ring-instructor-purple outline-none"></textarea>
+                </div>
+                
+                <div class="space-y-6">
+                    <div>
+                        <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 block">Lecture Attachment</label>
+                        <select name="lecture_id" id="lecture_id" class="w-full px-6 py-4 bg-primary-dark border border-gray-700 rounded-2xl text-white focus:ring-2 focus:ring-instructor-purple outline-none">
+                            <option value="">Select Target Lecture</option>
+                            @foreach ($courses as $course)
+                                @foreach ($course->modules as $module)
+                                    <optgroup label="{{ $course->title }} → {{ $module->title }}">
+                                        @foreach ($module->lectures as $lecture)
+                                            <option value="{{ $lecture->id }}">{{ $lecture->title }}</option>
+                                        @endforeach
+                                    </optgroup>
                                 @endforeach
-                            </optgroup>
-                        @endforeach
-                    @endforeach
-                </select>
-
-                <label class="flex items-center gap-2 text-sm text-gray-400">
-                    <input type="checkbox" name="is_active" id="quiz_active" value="1">
-                    Active
-                </label>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="flex items-center gap-3 p-4 bg-primary-dark rounded-2xl border border-gray-700">
+                        <input type="checkbox" name="is_active" id="quiz_active" value="1" class="w-5 h-5 accent-instructor-purple">
+                        <span class="text-sm font-bold text-gray-300">Set as Active (Make visible to students)</span>
+                    </div>
+                </div>
             </div>
 
-            <!-- Questions -->
-            <div class="border-t border-gray-700 pt-4 space-y-4">
+            <div class="space-y-6">
                 <div class="flex justify-between items-center">
-                    <h3 class="text-white font-semibold">Questions</h3>
-                    <button type="button" onclick="addQuestion()"
-                        class="px-4 py-2 bg-indigo-600/20 text-indigo-400 rounded-xl">
-                        + Add Question
+                    <h3 class="text-lg font-black text-white uppercase tracking-tight">Questions & Logic</h3>
+                    <button type="button" onclick="addQuestion()" class="flex items-center gap-2 px-5 py-2 bg-instructor-purple/10 text-instructor-purple font-black rounded-xl hover:bg-instructor-purple hover:text-white transition uppercase text-[10px]">
+                        <i data-lucide="plus" class="w-4 h-4"></i> Add Question
                     </button>
                 </div>
 
-                <div id="questionsContainer" class="space-y-4"></div>
-            </div>
-
-            <!-- Footer -->
-            <div class="flex justify-end gap-3 pt-6 border-t border-gray-700">
-                <button type="button" onclick="closeQuizModal()"
-                        class="px-4 py-2 bg-gray-800 text-gray-300 rounded-xl">
-                    Cancel
-                </button>
-
-                <button type="submit"
-                        class="px-6 py-2 bg-indigo-600 text-white rounded-xl">
-                    Save Quiz
-                </button>
+                <div id="questionsContainer" class="space-y-6"></div>
             </div>
         </form>
+
+        <!-- Footer -->
+        <div class="p-8 border-t border-gray-800 flex justify-end gap-4 bg-primary-dark/30">
+            <button type="button" onclick="closeQuizModal()" class="px-8 py-4 text-xs font-black text-gray-500 uppercase tracking-widest hover:text-white transition">Cancel</button>
+            <button type="submit" form="quizForm" class="px-10 py-4 bg-instructor-purple text-white font-black rounded-2xl hover:bg-opacity-90 shadow-xl shadow-instructor-purple/30 transition uppercase text-xs">Save Assessment</button>
+        </div>
     </div>
 </div>
 @endsection
 
-@push('scriptsdash')
+@push('scripts')
 <script>
 let quizMode = 'create';
+const modal = document.getElementById('quizModal');
+const form = document.getElementById('quizForm');
+const qContainer = document.getElementById('questionsContainer');
 
-/* ---------- MODAL HANDLING ---------- */
 function openCreateQuizModal() {
     quizMode = 'create';
-    quizForm.reset();
-    quiz_id.value = '';
-    questionsContainer.innerHTML = '';
-    quizModalTitle.innerText = 'Create Quiz';
-    quizModal.classList.remove('hidden');
+    form.reset();
+    document.getElementById('quiz_id').value = '';
+    qContainer.innerHTML = '';
+    document.getElementById('quizModalTitle').innerText = 'Create New Quiz';
+    modal.classList.remove('hidden');
+    lucide.createIcons();
 }
 
 function openEditQuizModal(id) {
     quizMode = 'edit';
-    questionsContainer.innerHTML = '';
+    qContainer.innerHTML = '';
 
     fetch(`/instructor/quizzes/${id}/fetch`)
         .then(res => res.json())
         .then(q => {
-            quiz_id.value = q.id;
-            quiz_title.value = q.title;
-            quiz_description.value = q.description ?? '';
-            lecture_id.value = q.lecture_id;
-            quiz_active.checked = q.is_active;
+            document.getElementById('quiz_id').value = q.id;
+            document.getElementById('quiz_title').value = q.title;
+            document.getElementById('quiz_description').value = q.description ?? '';
+            document.getElementById('lecture_id').value = q.lecture_id;
+            document.getElementById('quiz_active').checked = q.is_active;
 
             q.questions.forEach(question => addQuestion(question));
 
-            quizModalTitle.innerText = 'Edit Quiz';
-            quizModal.classList.remove('hidden');
+            document.getElementById('quizModalTitle').innerText = 'Update Quiz';
+            modal.classList.remove('hidden');
+            lucide.createIcons();
         });
 }
 
 function closeQuizModal() {
-    quizModal.classList.add('hidden');
+    modal.classList.add('hidden');
 }
 
-/* ---------- QUESTIONS ---------- */
 function addQuestion(q = {}) {
-    const uid = Date.now();
+    const uid = Date.now() + Math.random().toString(36).substring(7);
 
-    questionsContainer.insertAdjacentHTML('beforeend', `
-        <div class="bg-gray-800 border border-gray-700 rounded-xl p-5 space-y-3">
-            <input name="questions[${uid}][question]"
-                   value="${q.question ?? ''}"
-                   placeholder="Question"
-                   class="w-full px-4 py-2 rounded-xl bg-gray-900 text-white">
+    qContainer.insertAdjacentHTML('beforeend', `
+        <div class="bg-primary-dark border border-gray-800 rounded-[2rem] p-8 space-y-6 relative group overflow-hidden">
+            <div class="absolute top-0 right-0 p-2 opacity-0 group-hover:opacity-100 transition">
+                <button type="button" onclick="this.closest('.bg-primary-dark').remove()" class="p-3 bg-red-500/10 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition">
+                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                </button>
+            </div>
+            
+            <div>
+                <label class="text-[10px] font-black text-gray-600 uppercase tracking-widest mb-2 block">Question Content</label>
+                <input name="questions[${uid}][question]" value="${q.question ?? ''}" placeholder="Ask a question..." 
+                       class="w-full px-6 py-4 bg-secondary-dark border border-gray-700 rounded-2xl text-white focus:ring-2 focus:ring-instructor-purple outline-none">
+            </div>
 
-            ${[1,2,3,4].map(i => `
-                <div class="flex items-center gap-3">
-                    <input type="radio"
-                           name="questions[${uid}][correct_option]"
-                           value="${i}"
-                           ${q.correct_option == i ? 'checked' : ''}>
-                    <input name="questions[${uid}][options][${i}]"
-                           value="${q.options?.[i] ?? ''}"
-                           placeholder="Option ${i}"
-                           class="flex-1 px-4 py-2 rounded-xl bg-gray-900 text-white">
-                </div>
-            `).join('')}
-
-            <button type="button"
-                    onclick="this.closest('div').remove()"
-                    class="text-red-400 text-sm">
-                Remove Question
-            </button>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                ${[1,2,3,4].map(i => {
+                    let optText = '';
+                    if(q.options) {
+                        const optObj = q.options.find(o => o.option_number == i);
+                        optText = optObj ? optObj.option_text : '';
+                    }
+                    return `
+                    <div class="flex items-center gap-4 bg-secondary-dark/50 p-4 rounded-2xl border border-gray-800 focus-within:border-instructor-purple/50 transition">
+                        <div class="relative">
+                            <input type="radio" name="questions[${uid}][correct_option]" value="${i}" ${q.correct_option == i ? 'checked' : ''} 
+                                   class="w-5 h-5 accent-instructor-purple relative z-10 cursor-pointer">
+                            <div class="absolute inset-0 bg-instructor-purple/10 rounded-full scale-150 animate-pulse opacity-0 peer-checked:opacity-100"></div>
+                        </div>
+                        <input name="questions[${uid}][options][${i}]" value="${optText}" placeholder="Option ${i}" 
+                               class="bg-transparent border-none text-white text-sm focus:ring-0 w-full font-medium">
+                    </div>
+                    `
+                }).join('')}
+            </div>
         </div>
     `);
+    lucide.createIcons();
 }
 
-/* ---------- SUBMIT ---------- */
-quizForm.addEventListener('submit', function (e) {
+form.addEventListener('submit', function (e) {
     e.preventDefault();
 
     const url = quizMode === 'create'
-        ? '{{ route('instructor.quizzes.store') }}'
-        : `/instructor/quizzes/${quiz_id.value}/update`;
+        ? '/instructor/quizzes/store'
+        : `/instructor/quizzes/${document.getElementById('quiz_id').value}/update`;
+
+    const submitBtn = this.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerText;
+    submitBtn.innerText = 'SAVING...';
+    submitBtn.disabled = true;
 
     fetch(url, {
         method: 'POST',
@@ -233,8 +244,19 @@ quizForm.addEventListener('submit', function (e) {
     })
     .then(res => res.json())
     .then(res => {
-        if (res.status) location.reload();
-        else alert(res.message ?? 'Failed to save quiz');
+        if (res.status) {
+            location.reload();
+        } else {
+            alert(res.message ?? 'Failed to save quiz');
+            submitBtn.innerText = originalText;
+            submitBtn.disabled = false;
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        alert('Server connection failed');
+        submitBtn.innerText = originalText;
+        submitBtn.disabled = false;
     });
 });
 </script>
